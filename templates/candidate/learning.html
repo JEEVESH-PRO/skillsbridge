@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Upskilling & Learning Hub - SkillsBridge{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff;">Upskilling & Learning Hub</h1>
+    <p style="color: var(--text-muted);">Curated learning paths across missing job skills and company-sponsored courses</p>
+</div>
+
+<!-- Course Provider Filter Pills -->
+<div class="filter-pills">
+    <button class="pill active">All Courses</button>
+    <button class="pill">🎥 YouTube Tech</button>
+    <button class="pill">🎓 Coursera & Platforms</button>
+    <button class="pill">🏢 Company Sponsored</button>
+</div>
+
+<div class="grid-3">
+    {% for crs in courses %}
+        <div class="glass-panel" style="padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1rem;">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.8rem;">
+                    <span class="badge badge-domain" style="font-size: 0.75rem;">{{ crs.skill.name }}</span>
+                    {% if crs.source_type == 'youtube' %}
+                        <span class="badge badge-missing" style="font-size: 0.75rem;">YouTube</span>
+                    {% elif crs.source_type == 'company' %}
+                        <span class="badge badge-matched" style="font-size: 0.75rem;">Company Official</span>
+                    {% else %}
+                        <span class="badge badge-partial" style="font-size: 0.75rem;">Platform</span>
+                    {% endif %}
+                </div>
+
+                <h3 style="font-size: 1.15rem; color: #fff; line-height: 1.4; margin-bottom: 0.5rem;">{{ crs.title }}</h3>
+                <div style="font-size: 0.85rem; color: var(--text-sub);">Provider: <strong>{{ crs.provider }}</strong></div>
+            </div>
+
+            <div>
+                <div style="display: flex; gap: 1rem; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+                    <span>⏱️ {{ crs.duration }}</span>
+                    <span>📈 {{ crs.difficulty }}</span>
+                </div>
+                <a href="{{ crs.url }}" target="_blank" class="btn btn-primary btn-sm" style="width: 100%;">
+                    Start Course ↗
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

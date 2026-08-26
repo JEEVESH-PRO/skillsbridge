@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Login - SkillsBridge{% endblock %}
+
+{% block content %}
+<div style="max-width: 450px; margin: 3rem auto 0 auto;" class="glass-panel">
+    <div style="padding: 2rem;">
+        <h2 style="font-size: 1.8rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; text-align: center;">Welcome Back</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; margin-bottom: 2rem;">
+            Sign in to access your skills dashboard and job applications
+        </p>
+
+        <!-- Quick Demo Account Pills -->
+        <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: var(--radius-sm); padding: 0.9rem; margin-bottom: 1.5rem;">
+            <div style="font-size: 0.8rem; font-weight: 600; color: var(--primary); margin-bottom: 0.4rem; text-transform: uppercase;">⚡ Quick Judge Demo Logins</div>
+            <div style="font-size: 0.85rem; color: var(--text-sub); display: flex; flex-direction: column; gap: 0.3rem;">
+                <div><strong>Candidate:</strong> candidate@skillsbridge.com / password123</div>
+                <div><strong>Employer:</strong> recruiter@google.com / password123</div>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ url_for('auth.login') }}">
+            <div class="form-group">
+                <label class="form-label" for="email">Email Address</label>
+                <input type="email" id="email" name="email" class="form-input" placeholder="name@domain.com" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-input" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.8rem;">
+                Sign In →
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">
+            Don't have an account? <a href="{{ url_for('auth.signup') }}" style="color: var(--primary); font-weight: 600;">Sign Up Here</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

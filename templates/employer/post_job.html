@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Post New Job Opening - SkillsBridge{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 2rem auto 0 auto;" class="glass-panel">
+    <div style="padding: 2.5rem;">
+        <h2 style="font-size: 1.8rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem;">Create New Job Opening</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">
+            Post open positions and select required skills to run automatic candidate match scoring
+        </p>
+
+        <form method="POST" action="{{ url_for('employer.post_job') }}">
+            <div class="form-group">
+                <label class="form-label" for="title">Job Title</label>
+                <input type="text" id="title" name="title" class="form-input" placeholder="e.g. Senior Backend Engineer" required>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label class="form-label" for="domain">Domain Area</label>
+                    <select name="domain" id="domain" class="form-select">
+                        <option value="Backend Engineering">Backend Engineering</option>
+                        <option value="Frontend Engineering">Frontend Engineering</option>
+                        <option value="AI / Machine Learning">AI / Machine Learning</option>
+                        <option value="Software Development">Software Development</option>
+                        <option value="DevOps & Cloud">DevOps & Cloud</option>
+                        <option value="UI/UX Design">UI/UX Design</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="experience_required">Experience Required</label>
+                    <input type="text" id="experience_required" name="experience_required" class="form-input" placeholder="e.g. 2-4 yrs" required>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label class="form-label" for="location">Location</label>
+                    <input type="text" id="location" name="location" class="form-input" placeholder="e.g. Remote / San Francisco, CA" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="salary_range">Salary Range</label>
+                    <input type="text" id="salary_range" name="salary_range" class="form-input" placeholder="e.g. $140,000 - $180,000 / yr" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="description">Detailed Description</label>
+                <textarea id="description" name="description" class="form-textarea" rows="5" placeholder="Responsibilities, team context, and tech stack details..." required></textarea>
+            </div>
+
+            <!-- Required Skills Checkboxes -->
+            <div class="form-group" style="margin-top: 1.5rem;">
+                <label class="form-label" style="margin-bottom: 0.8rem;">Select Required Skills</label>
+                <div class="grid-2" style="max-height: 250px; overflow-y: auto; padding: 1rem; background: rgba(17, 24, 39, 0.8); border: 1px solid var(--border-glass); border-radius: var(--radius-sm);">
+                    {% for s in skills %}
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-sub); cursor: pointer;">
+                            <input type="checkbox" name="skill_ids" value="{{ s.id }}">
+                            <span>{{ s.name }} ({{ s.category }})</span>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem; padding: 0.85rem;">
+                Publish Job Opening →
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

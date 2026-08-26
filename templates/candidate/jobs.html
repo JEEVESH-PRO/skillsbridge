@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Explore Jobs & Skill Gap Analysis - SkillsBridge{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff;">Explore Openings & AI Match Scores</h1>
+    <p style="color: var(--text-muted);">Browse openings across top hiring partners and instantly analyze your skill compatibility</p>
+</div>
+
+<!-- Search & Domain Filter Bar -->
+<div class="glass-panel" style="padding: 1.5rem; margin-bottom: 2rem;">
+    <form method="GET" action="{{ url_for('candidate.jobs') }}" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <input type="text" name="q" value="{{ query }}" class="form-input" placeholder="Search by job title, company, or skill..." style="flex: 1; min-width: 250px;">
+        <select name="domain" class="form-select" style="width: auto; min-width: 180px;">
+            <option value="">All Domains</option>
+            {% for d in domains %}
+                <option value="{{ d }}" {% if selected_domain == d %}selected{% endif %}>{{ d }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary">Search Jobs</button>
+        {% if query or selected_domain %}
+            <a href="{{ url_for('candidate.jobs') }}" class="btn btn-secondary">Clear Filters</a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Job Listings Grid -->
+<div class="grid-2">
+    {% for job in jobs %}
+        {% set match_data = match_scores.get(job.id, {'score': 0, 'status': 'low'}) %}
+        <div class="glass-panel job-card">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                    <div class="job-header">
+                        <img src="{{ job.company.logo_url }}" alt="{{ job.company.name }}" class="company-logo">
+                        <div>
+                            <h3 class="job-title"><a href="{{ url_for('candidate.job_detail', job_id=job.id) }}">{{ job.title }}</a></h3>
+                            <div style="font-size: 0.9rem; color: var(--text-sub);">
+                                <a href="{{ url_for('company.company_detail', name=job.company.name) }}">{{ job.company.name }}</a> • <span class="badge badge-domain">{{ job.domain }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Match Score Pill -->
+                    {% if session.get('user_role') == 'candidate' %}
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Match Score</div>
+                            <span class="badge {% if match_data.score >= 70 %}badge-matched{% elif match_data.score >= 40 %}badge-partial{% else %}badge-missing{% endif %}" style="font-size: 0.95rem; font-weight: 800; padding: 0.35rem 0.75rem;">
+                                {{ match_data.score }}%
+                            </span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+                    {{ job.description[:140] }}...
+                </p>
+
+                <!-- Required Skills Tags -->
+                <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                    {% for req in job.requirements[:4] %}
+                        <span style="font-size: 0.75rem; background: rgba(255, 255, 255, 0.06); padding: 0.2rem 0.5rem; border-radius: var(--radius-sm); color: var(--text-sub);">
+                            {{ req.skill.name }}
+                        </span>
+                    {% endfor %}
+                    {% if job.requirements|length > 4 %}
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">+{{ job.requirements|length - 4 }} more</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-glass); padding-top: 1rem;">
+                <div class="job-meta">
+                    <span>📍 {{ job.location }}</span>
+                    <span>💰 {{ job.salary_range }}</span>
+                </div>
+                
+                <div style="display: flex; gap: 0.5rem;">
+                    <a href="{{ url_for('candidate.skills_gap', job_id=job.id) }}" class="btn btn-secondary btn-sm">
+                        📊 Skills Gap
+                    </a>
+                    <a href="{{ url_for('candidate.job_detail', job_id=job.id) }}" class="btn btn-primary btn-sm">
+                        Details →
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

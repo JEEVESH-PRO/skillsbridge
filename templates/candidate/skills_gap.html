@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Skill Gap Analysis - {{ job.title }} - SkillsBridge{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <span class="badge badge-domain" style="margin-bottom: 0.5rem;">Diagnostic Skill Report</span>
+            <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff;">{{ job.title }}</h1>
+            <p style="color: var(--text-muted);">Company: <strong>{{ job.company.name }}</strong> • Domain: {{ job.domain }}</p>
+        </div>
+
+        <div style="display: flex; gap: 0.8rem;">
+            <a href="{{ url_for('candidate.interview_prep', job_id=job.id) }}" class="btn btn-secondary">
+                📖 Interview Prep Kit
+            </a>
+            <form method="POST" action="{{ url_for('candidate.apply_job', job_id=job.id) }}" style="display: inline;">
+                <button type="submit" class="btn btn-primary">Apply Now →</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Radial Score & Overview Header -->
+<div class="match-score-card" style="margin-bottom: 2.5rem;">
+    <div class="radial-gauge" data-score="{{ analysis.match_score }}">
+        <svg viewBox="0 0 100 100">
+            <circle class="radial-bg" cx="50" cy="50" r="40"></circle>
+            <circle class="radial-fill" cx="50" cy="50" r="40"></circle>
+        </svg>
+        <span class="radial-text">0%</span>
+    </div>
+
+    <div>
+        <h2 style="font-size: 1.6rem; color: #fff; margin-bottom: 0.4rem;">
+            Skill Match Score: {{ analysis.match_score }}%
+        </h2>
+        <p style="color: var(--text-sub); font-size: 0.95rem; max-width: 650px; line-height: 1.5;">
+            {% if analysis.match_score >= 80 %}
+                🔥 <strong>Excellent Compatibility!</strong> Your profile matches most required skills. We recommend applying directly while brushing up missing gaps below.
+            {% elif analysis.match_score >= 50 %}
+                ⚡ <strong>Moderate Match!</strong> You have key core skills, but have {{ analysis.missing_skills|length }} flagged skill gaps. Click <strong>Source</strong> on any missing skill to open targeted courses.
+            {% else %}
+                🎯 <strong>Skill Gap Flagged!</strong> You need to upskill in {{ analysis.missing_skills|length }} required areas. Take the sourced courses below to reach 80%+ match capability!
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+<div class="grid-2">
+    <!-- Matched Skills Column -->
+    <div class="glass-panel" style="padding: 2rem;">
+        <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.5rem;">
+            <span style="font-size: 1.5rem;">✅</span>
+            <h3 style="font-size: 1.3rem; color: #fff;">Matched Skills ({{ analysis.matched_skills|length }})</h3>
+        </div>
+
+        {% if analysis.matched_skills %}
+            <div style="display: flex; flex-direction: column; gap: 0.9rem;">
+                {% for item in analysis.matched_skills %}
+                    <div style="padding: 1rem; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="color: #fff; font-size: 1.05rem;">{{ item.name }}</strong>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Your Level: <strong>{{ item.candidate_level }}</strong></div>
+                        </div>
+                        <span class="badge badge-matched">Required: {{ item.required_level }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                No matching skills found in your profile yet. Add skills in your profile or take courses below!
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Missing Skill Gaps & Sourcing Column -->
+    <div class="glass-panel" style="padding: 2rem; border-color: rgba(244, 63, 94, 0.3);">
+        <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.5rem;">
+            <span style="font-size: 1.5rem;">⚠️</span>
+            <h3 style="font-size: 1.3rem; color: #fff;">Missing Skill Gaps ({{ analysis.missing_skills|length }})</h3>
+        </div>
+
+        {% if analysis.missing_skills %}
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                {% for item in analysis.missing_skills %}
+                    <div style="padding: 1.1rem; background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.25); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem;">
+                        <div>
+                            <strong style="color: #fff; font-size: 1.1rem; display: block;">{{ item.name }}</strong>
+                            <span class="badge badge-missing" style="font-size: 0.75rem;">Target Level: {{ item.required_level }}</span>
+                        </div>
+
+                        <!-- Source Skill Button -->
+                        <button class="btn btn-accent btn-sm btn-source-skill" data-skill-id="{{ item.id }}" data-skill-name="{{ item.name }}" onclick="sourceSkillCourses('{{ item.id }}', '{{ item.name }}')">
+                            🎓 Source Course
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div style="padding: 2rem; text-align: center; color: var(--emerald);">
+                🎉 Congratulations! You have 0 missing skill gaps for this role!
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}My Job Applications - SkillsBridge{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff;">Application Tracker</h1>
+    <p style="color: var(--text-muted);">Track your active job applications and company status</p>
+</div>
+
+{% if applications %}
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        {% for app in applications %}
+            <div class="glass-panel" style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 1.25rem;">
+                    <img src="{{ app.job.company.logo_url }}" alt="{{ app.job.company.name }}" class="company-logo">
+                    <div>
+                        <h3 style="font-size: 1.2rem; color: #fff; margin-bottom: 0.2rem;">
+                            <a href="{{ url_for('candidate.job_detail', job_id=app.job.id) }}">{{ app.job.title }}</a>
+                        </h3>
+                        <div style="font-size: 0.9rem; color: var(--text-sub);">
+                            {{ app.job.company.name }} • {{ app.job.location }}
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.4rem;">
+                            Applied on {{ app.applied_at.strftime('%b %d, %Y') }}
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 1.5rem;">
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.2rem;">Match Score at Application</div>
+                        <span class="badge badge-domain" style="font-size: 1rem; padding: 0.3rem 0.8rem;">
+                            {{ app.match_score }}% Match
+                        </span>
+                    </div>
+
+                    <div>
+                        {% if app.status == 'Shortlisted' %}
+                            <span class="badge badge-matched" style="font-size: 0.95rem; padding: 0.5rem 1rem;">
+                                🎉 Shortlisted
+                            </span>
+                        {% elif app.status == 'Rejected' %}
+                            <span class="badge badge-missing" style="font-size: 0.95rem; padding: 0.5rem 1rem;">
+                                Rejected
+                            </span>
+                        {% else %}
+                            <span class="badge badge-partial" style="font-size: 0.95rem; padding: 0.5rem 1rem;">
+                                ⏳ Under Review
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="glass-panel" style="padding: 3rem; text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">💼</div>
+        <h3 style="font-size: 1.4rem; color: #fff; margin-bottom: 0.5rem;">No Applications Submitted Yet</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Browse job openings, check your skill match score, and submit your application!</p>
+        <a href="{{ url_for('candidate.jobs') }}" class="btn btn-primary">Browse Jobs Now →</a>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}{{ job.title }} at {{ job.company.name }} - SkillsBridge{% endblock %}
+
+{% block content %}
+<div class="glass-panel" style="padding: 2.5rem; margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
+        <div style="display: flex; gap: 1.5rem; align-items: center;">
+            <img src="{{ job.company.logo_url }}" alt="{{ job.company.name }}" style="width: 64px; height: 64px; object-fit: contain; background: rgba(255, 255, 255, 0.05); padding: 8px; border-radius: var(--radius-md);">
+            <div>
+                <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 0.3rem;">{{ job.title }}</h1>
+                <div style="font-size: 1.1rem; color: var(--text-sub);">
+                    <a href="{{ url_for('company.company_detail', name=job.company.name) }}">{{ job.company.name }}</a> • <span class="badge badge-domain">{{ job.domain }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action CTAs -->
+        <div style="display: flex; gap: 0.8rem; align-items: center;">
+            <a href="{{ url_for('candidate.skills_gap', job_id=job.id) }}" class="btn btn-accent">
+                ⚡ Skills Gap & Sourcing
+            </a>
+            <a href="{{ url_for('candidate.interview_prep', job_id=job.id) }}" class="btn btn-secondary">
+                📖 Interview Prep
+            </a>
+            
+            {% if applied %}
+                <button class="btn btn-secondary" disabled style="opacity: 0.7;">✓ Applied</button>
+            {% else %}
+                <form method="POST" action="{{ url_for('candidate.apply_job', job_id=job.id) }}" style="display: inline;">
+                    <button type="submit" class="btn btn-primary">Apply Now →</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 2rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-glass); flex-wrap: wrap; font-size: 0.95rem; color: var(--text-sub);">
+        <div>📍 <strong>Location:</strong> {{ job.location }}</div>
+        <div>💰 <strong>Compensation:</strong> {{ job.salary_range }}</div>
+        <div>⏱️ <strong>Experience:</strong> {{ job.experience_required }}</div>
+    </div>
+</div>
+
+<div class="grid-2">
+    <!-- Description & Context -->
+    <div class="glass-panel" style="padding: 2rem;">
+        <h3 style="font-size: 1.3rem; color: #fff; margin-bottom: 1rem;">Job Description</h3>
+        <div style="color: var(--text-muted); line-height: 1.7; font-size: 0.95rem; white-space: pre-line;">
+            {{ job.description }}
+        </div>
+    </div>
+
+    <!-- Required Skills Checklist -->
+    <div class="glass-panel" style="padding: 2rem; display: flex; flex-direction: column; gap: 1.25rem;">
+        <h3 style="font-size: 1.3rem; color: #fff;">Required Technical Skills</h3>
+        
+        <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+            {% for req in job.requirements %}
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1rem; background: rgba(255, 255, 255, 0.04); border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
+                    <div>
+                        <strong style="color: #fff; font-size: 1rem;">{{ req.skill.name }}</strong>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">{{ req.skill.category }}</div>
+                    </div>
+                    <span class="badge badge-domain">{{ req.required_level }} Required</span>
+                </div>
+            {% endfor %}
+        </div>
+
+        <a href="{{ url_for('candidate.skills_gap', job_id=job.id) }}" class="btn btn-primary" style="margin-top: 1rem; text-align: center;">
+            Run Match & Gap Analysis →
+        </a>
+    </div>
+</div>
+{% endblock %}

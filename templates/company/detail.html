@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}{{ company.name }} - Open Roles & Profile - SkillsBridge{% endblock %}
+
+{% block content %}
+<div class="glass-panel" style="padding: 2.5rem; margin-bottom: 2rem;">
+    <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
+        <img src="{{ company.logo_url }}" alt="{{ company.name }}" style="width: 72px; height: 72px; object-fit: contain; background: rgba(255, 255, 255, 0.05); padding: 10px; border-radius: var(--radius-md);">
+        <div>
+            <h1 style="font-size: 2.4rem; font-weight: 800; color: #fff;">{{ company.name }}</h1>
+            <div style="font-size: 1rem; color: var(--text-sub);">
+                🏢 Industry: <strong>{{ company.industry }}</strong> • 📍 {{ company.location }}
+            </div>
+            {% if company.website %}
+                <a href="{{ company.website }}" target="_blank" style="font-size: 0.9rem; color: var(--primary); margin-top: 0.3rem; display: inline-block;">
+                    🌐 {{ company.website }} ↗
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <p style="font-size: 1rem; color: var(--text-muted); line-height: 1.6; margin-top: 1.5rem; border-top: 1px solid var(--border-glass); padding-top: 1.25rem;">
+        {{ company.description }}
+    </p>
+</div>
+
+<section style="margin-top: 3rem;">
+    <h2 style="font-size: 1.6rem; color: #fff; margin-bottom: 1.5rem;">Active Openings at {{ company.name }} ({{ jobs|length }})</h2>
+
+    {% if jobs %}
+        <div class="grid-2">
+            {% for job in jobs %}
+                <div class="glass-panel job-card">
+                    <div>
+                        <h3 class="job-title"><a href="{{ url_for('candidate.job_detail', job_id=job.id) }}">{{ job.title }}</a></h3>
+                        <span class="badge badge-domain" style="margin-bottom: 0.8rem;">{{ job.domain }}</span>
+                        
+                        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+                            {{ job.description[:130] }}...
+                        </p>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-glass); padding-top: 1rem;">
+                        <div class="job-meta">
+                            <span>💰 {{ job.salary_range }}</span>
+                        </div>
+                        <a href="{{ url_for('candidate.skills_gap', job_id=job.id) }}" class="btn btn-primary btn-sm">
+                            Match & Gap Analysis →
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="glass-panel" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+            No active job postings listed for {{ company.name }} right now.
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

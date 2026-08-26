@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile & Skills Matrix - SkillsBridge{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff;">My Skills Matrix</h1>
+    <p style="color: var(--text-muted);">Manage your current technical competencies to automatically match against top job postings</p>
+</div>
+
+<div class="grid-2">
+    <!-- User Bio & Info -->
+    <div class="glass-panel" style="padding: 2rem;">
+        <div style="display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem;">
+            <div style="width: 60px; height: 60px; border-radius: var(--radius-full); background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 800; color: #fff;">
+                {{ user.name[0] }}
+            </div>
+            <div>
+                <h2 style="font-size: 1.5rem; color: #fff;">{{ user.name }}</h2>
+                <div style="font-size: 0.9rem; color: var(--primary); font-weight: 600;">{{ user.headline or 'Candidate Developer' }}</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">{{ user.email }}</div>
+            </div>
+        </div>
+
+        <div style="font-size: 0.95rem; color: var(--text-sub); line-height: 1.6; border-top: 1px solid var(--border-glass); padding-top: 1rem;">
+            {{ user.bio or 'No bio provided yet. Update your profile below!' }}
+        </div>
+    </div>
+
+    <!-- Skill Selector & Add Panel -->
+    <div class="glass-panel" style="padding: 2rem;">
+        <h3 style="font-size: 1.3rem; color: #fff; margin-bottom: 1.25rem;">+ Add Skill to Matrix</h3>
+        
+        <form method="POST" action="{{ url_for('candidate.add_skill') }}">
+            <div class="form-group">
+                <label class="form-label" for="skill_id">Select Skill</label>
+                <select name="skill_id" id="skill_id" class="form-select" required>
+                    {% for s in all_skills %}
+                        <option value="{{ s.id }}">{{ s.name }} ({{ s.category }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="proficiency">Proficiency Level</label>
+                <select name="proficiency" id="proficiency" class="form-select">
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate" selected>Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                    <option value="Expert">Expert</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Add Skill to Matrix</button>
+        </form>
+    </div>
+</div>
+
+<!-- Active Candidate Skills Matrix -->
+<section style="margin-top: 3rem;">
+    <h3 style="font-size: 1.5rem; color: #fff; margin-bottom: 1.5rem;">Your Active Skills ({{ user_skills|length }})</h3>
+
+    {% if user_skills %}
+        <div class="grid-3">
+            {% for cs in user_skills %}
+                <div class="glass-panel" style="padding: 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong style="font-size: 1.1rem; color: #fff; display: block; margin-bottom: 0.2rem;">{{ cs.skill.name }}</strong>
+                        <span class="badge badge-domain" style="font-size: 0.75rem;">{{ cs.proficiency }}</span>
+                    </div>
+
+                    <form method="POST" action="{{ url_for('candidate.remove_skill', candidate_skill_id=cs.id) }}">
+                        <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--rose); border-color: rgba(244, 63, 94, 0.3);" onclick="return confirm('Remove skill from profile?')">
+                            ✕ Remove
+                        </button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="glass-panel" style="padding: 2.5rem; text-align: center; color: var(--text-muted);">
+            No skills added yet. Select from dropdown above to add your first technical skill!
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

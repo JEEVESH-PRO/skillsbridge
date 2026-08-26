@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Applicants for {{ job.title }} - SkillsBridge{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <span class="badge badge-domain" style="margin-bottom: 0.5rem;">Applicant Review Panel</span>
+            <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff;">{{ job.title }}</h1>
+            <p style="color: var(--text-muted);">Company: <strong>{{ job.company.name }}</strong> • Total Applicants: <strong>{{ applicants|length }}</strong></p>
+        </div>
+
+        <a href="{{ url_for('employer.dashboard') }}" class="btn btn-secondary">← Back to Dashboard</a>
+    </div>
+</div>
+
+{% if applicants %}
+    <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+        {% for item in applicants %}
+            {% set app = item.application %}
+            <div class="glass-panel" style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+                <div style="display: flex; align-items: center; gap: 1.25rem;">
+                    <div style="width: 50px; height: 50px; border-radius: var(--radius-full); background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; color: #fff;">
+                        {{ item.candidate.name[0] }}
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.2rem; color: #fff; margin-bottom: 0.2rem;">{{ item.candidate.name }}</h3>
+                        <div style="font-size: 0.85rem; color: var(--primary); font-weight: 600;">{{ item.candidate.headline or 'Candidate Developer' }}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">Email: {{ item.candidate.email }}</div>
+                        
+                        <!-- Candidate Skill Tags -->
+                        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.6rem;">
+                            {% for cs in item.candidate_skills %}
+                                <span style="font-size: 0.75rem; background: rgba(255, 255, 255, 0.06); border: 1px solid var(--border-glass); padding: 0.15rem 0.5rem; border-radius: var(--radius-sm); color: var(--text-sub);">
+                                    {{ cs.skill.name }} ({{ cs.proficiency }})
+                                </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 2rem;">
+                    <!-- AI Match Score Gauge -->
+                    <div style="text-align: center;">
+                        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Match Score</div>
+                        <span class="badge {% if item.match_score >= 70 %}badge-matched{% elif item.match_score >= 40 %}badge-partial{% else %}badge-missing{% endif %}" style="font-size: 1.1rem; font-weight: 800; padding: 0.4rem 0.9rem;">
+                            {{ item.match_score }}% Match
+                        </span>
+                    </div>
+
+                    <!-- Update Application Status Form -->
+                    <form method="POST" action="{{ url_for('employer.update_applicant_status', application_id=app.id) }}" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <select name="status" class="form-select" style="padding: 0.4rem 0.8rem; font-size: 0.85rem; width: auto;">
+                            <option value="Applied" {% if app.status == 'Applied' %}selected{% endif %}>Applied</option>
+                            <option value="Shortlisted" {% if app.status == 'Shortlisted' %}selected{% endif %}>Shortlist</option>
+                            <option value="Rejected" {% if app.status == 'Rejected' %}selected{% endif %}>Reject</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="glass-panel" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+        No candidates have applied to this job posting yet.
+    </div>
+{% endif %}
+{% endblock %}

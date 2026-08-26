@@ -1,0 +1,28 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Database files
+*.db
+*.sqlite3
+d2h.db
+skillsbridge.db
+
+# Secrets & Service Accounts
+firebase_service_account.json
+*service_account*.json
+*.pem
+.env
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+
+# IDE & System Files
+.vscode/
+.idea/
+.DS_Store
+*.log
