@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}SkillsBridge - Bridging Skill Gaps to Dream Careers{% endblock %}</title>
     <meta name="description" content="SkillsBridge diagnoses candidate skill gaps with targeted learning, company interview prep, and direct job match analytics.">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v={{ app_version }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}?v={{ app_version }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -81,8 +81,8 @@
         <p>&copy; 2026 SkillsBridge • Skill-Bridging Career Platform</p>
     </footer>
 
-    <script src="{{ url_for('static', filename='js/main.js') }}?v={{ app_version }}"></script>
-    <script src="{{ url_for('static', filename='js/skills.js') }}?v={{ app_version }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/skills.js') }}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>
