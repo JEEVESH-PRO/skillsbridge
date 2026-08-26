@@ -11,7 +11,7 @@
 <!-- Search & Domain Filter Bar -->
 <div class="glass-panel" style="padding: 1.5rem; margin-bottom: 2rem;">
     <form method="GET" action="{{ url_for('candidate.jobs') }}" style="display: flex; gap: 1rem; flex-wrap: wrap;">
-        <input type="text" name="q" value="{{ query }}" class="form-input" placeholder="Search by job title, company, or skill..." style="flex: 1; min-width: 250px;">
+        <input type="text" name="q" value="{{ search_query }}" class="form-input" placeholder="Search by job title, company, or skill..." style="flex: 1; min-width: 250px;">
         <select name="domain" class="form-select" style="width: auto; min-width: 180px;">
             <option value="">All Domains</option>
             {% for d in domains %}
@@ -19,7 +19,7 @@
             {% endfor %}
         </select>
         <button type="submit" class="btn btn-primary">Search Jobs</button>
-        {% if query or selected_domain %}
+        {% if search_query or selected_domain != 'All' %}
             <a href="{{ url_for('candidate.jobs') }}" class="btn btn-secondary">Clear Filters</a>
         {% endif %}
     </form>
@@ -59,13 +59,13 @@
 
                 <!-- Required Skills Tags -->
                 <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem;">
-                    {% for req in job.requirements[:4] %}
+                    {% for req in job.skill_requirements[:4] %}
                         <span style="font-size: 0.75rem; background: rgba(255, 255, 255, 0.06); padding: 0.2rem 0.5rem; border-radius: var(--radius-sm); color: var(--text-sub);">
                             {{ req.skill.name }}
                         </span>
                     {% endfor %}
-                    {% if job.requirements|length > 4 %}
-                        <span style="font-size: 0.75rem; color: var(--text-muted);">+{{ job.requirements|length - 4 }} more</span>
+                    {% if job.skill_requirements|length > 4 %}
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">+{{ job.skill_requirements|length - 4 }} more</span>
                     {% endif %}
                 </div>
             </div>

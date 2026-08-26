@@ -95,10 +95,10 @@ def jobs():
     all_jobs = query.order_by(JobPosting.created_at.desc()).all()
 
     # Calculate match percentage preview for candidate
-    job_match_map = {}
+    match_scores = {}
     for job in all_jobs:
         analysis = analyze_skill_gap(user, job)
-        job_match_map[job.id] = analysis['match_score']
+        match_scores[job.id] = {'score': analysis['match_score'], 'status': 'matched' if analysis['match_score'] >= 70 else 'partial'}
 
     domains = ['All', 'Backend Engineering', 'AI / Machine Learning', 'Frontend Engineering', 'DevOps & Cloud', 'Software Development']
 
@@ -108,7 +108,8 @@ def jobs():
         domains=domains,
         selected_domain=domain_filter or 'All',
         search_query=search_query,
-        job_match_map=job_match_map,
+        match_scores=match_scores,
+        job_match_map={k: v['score'] for k, v in match_scores.items()},
         user=user
     )
 

@@ -7,7 +7,7 @@ try:
 except ImportError:
     import database.sqlite3_shim
 
-from flask import Flask, render_template, session, redirect, url_for
+from flask import Flask, render_template, session, redirect, url_for, request
 from config import Config
 from models import db
 from database.seed_data import seed_database
@@ -33,6 +33,17 @@ def create_app():
     app.register_blueprint(candidate_bp)
     app.register_blueprint(company_bp)
     app.register_blueprint(employer_bp)
+
+    # Inject version into templates to prevent frontend-backend asset cache mismatches
+    @app.context_processor
+    def inject_app_version():
+        return dict(app_version=Config.APP_VERSION)
+
+    # Add client-server version sync header to prevent deployment mismatches
+    @app.after_request
+    def add_version_header(response):
+        response.headers['X-SkillsBridge-Version'] = Config.APP_VERSION
+        return response
 
     @app.route('/')
     def landing():

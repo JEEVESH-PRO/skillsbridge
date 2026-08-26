@@ -12,7 +12,7 @@
         </div>
 
         <div style="display: flex; gap: 0.8rem;">
-            <a href="{{ url_for('candidate.interview_prep', job_id=job.id) }}" class="btn btn-secondary">
+            <a href="{{ url_for('candidate.interview', job_id=job.id) }}" class="btn btn-secondary">
                 📖 Interview Prep Kit
             </a>
             <form method="POST" action="{{ url_for('candidate.apply_job', job_id=job.id) }}" style="display: inline;">
