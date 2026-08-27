@@ -10,14 +10,6 @@ PROFICIENCY_WEIGHTS = {
 }
 
 def analyze_skill_gap(user, job):
-    """
-    Compares user's candidate_skills against job.skill_requirements.
-    Returns a structured report containing:
-    - match_score (0 - 100%)
-    - matched_skills (list)
-    - missing_skills (list with attached learning courses)
-    - summary (text)
-    """
     if not job:
         return {
             'match_score': 0,
@@ -26,7 +18,6 @@ def analyze_skill_gap(user, job):
             'summary': 'Job not found.'
         }
 
-    # Fetch user skills mapped by skill_id
     user_skill_map = {}
     if user and user.is_candidate():
         for cs in user.candidate_skills:
@@ -59,7 +50,6 @@ def analyze_skill_gap(user, job):
             u_sk = user_skill_map[sk_id]
             u_weight = u_sk['weight']
             
-            # Calculate match ratio for this skill
             skill_score = min(1.0, u_weight / max(0.1, req_weight))
             total_weighted_match += skill_score
 
@@ -71,7 +61,6 @@ def analyze_skill_gap(user, job):
                 'status': 'Matched' if skill_score >= 0.85 else 'Partial Match'
             })
         else:
-            # Missing skill! Sourced course lookup
             courses = Course.query.filter_by(skill_id=sk_id).limit(3).all()
             course_list = []
             for c in courses:
@@ -79,7 +68,7 @@ def analyze_skill_gap(user, job):
                     'id': c.id,
                     'title': c.title,
                     'provider': c.provider,
-                    'source_type': c.source_type, # youtube, platform, company
+                    'source_type': c.source_type,
                     'url': c.url,
                     'duration': c.duration,
                     'difficulty': c.difficulty
@@ -97,7 +86,6 @@ def analyze_skill_gap(user, job):
     match_score = int(round((total_weighted_match / total_req_count) * 100))
     match_score = min(100, max(0, match_score))
 
-    # Summary generator
     if match_score >= 85:
         summary = f"Strong Match ({match_score}%)! You meet almost all required skill criteria for {job.title}."
     elif match_score >= 50:

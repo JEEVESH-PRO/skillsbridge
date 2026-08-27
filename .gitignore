@@ -9,6 +9,10 @@ __pycache__/
 d2h.db
 skillsbridge.db
 
+# Uploads (ephemeral temp dir on Netlify)
+uploads/
+.netlify/
+
 # Secrets & Service Accounts
 firebase_service_account.json
 *service_account*.json

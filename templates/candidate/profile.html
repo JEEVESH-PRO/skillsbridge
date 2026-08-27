@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}My Profile & Skills Matrix - SkillsBridge{% endblock %}
+{% block title %}My Skills Matrix - SkillsBridge{% endblock %}
 
 {% block content %}
 <div style="margin-bottom: 2rem;">
     <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff;">My Skills Matrix</h1>
-    <p style="color: var(--text-muted);">Manage your current technical competencies to automatically match against top job postings</p>
+    <p style="color: var(--text-muted);">Manage your technical competencies or upload your resume to auto-detect skills</p>
 </div>
 
 <div class="grid-2">
@@ -27,60 +27,237 @@
         </div>
     </div>
 
-    <!-- Skill Selector & Add Panel -->
-    <div class="glass-panel" style="padding: 2rem;">
-        <h3 style="font-size: 1.3rem; color: #fff; margin-bottom: 1.25rem;">+ Add Skill to Matrix</h3>
-        
-        <form method="POST" action="{{ url_for('candidate.add_skill') }}">
-            <div class="form-group">
-                <label class="form-label" for="skill_id">Select Skill</label>
-                <select name="skill_id" id="skill_id" class="form-select" required>
-                    {% for s in all_skills %}
-                        <option value="{{ s.id }}">{{ s.name }} ({{ s.category }})</option>
-                    {% endfor %}
-                </select>
+    <!-- Resume Upload Panel -->
+    <div class="glass-panel" style="padding: 2rem; border: 1px dashed rgba(99, 102, 241, 0.4);">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+            <div style="width: 40px; height: 40px; border-radius: var(--radius-sm); background: rgba(99, 102, 241, 0.15); display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                &#128196;
+            </div>
+            <div>
+                <h3 style="font-size: 1.2rem; color: #fff; margin: 0;">Auto-Detect Skills</h3>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Upload your resume to extract skills instantly</p>
+            </div>
+        </div>
+
+        <form id="resumeForm" method="POST" action="{{ url_for('candidate.upload_resume') }}" enctype="multipart/form-data">
+            <div id="dropZone" style="border: 2px dashed var(--border-glass); border-radius: var(--radius-md); padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s ease; background: rgba(17, 24, 39, 0.4);">
+                <div id="dropZoneContent">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.75rem; opacity: 0.6;">&#128206;</div>
+                    <p style="color: var(--text-sub); font-weight: 600; margin-bottom: 0.3rem;">Drag & drop your resume here</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">or click to browse files</p>
+                    <p style="color: var(--text-muted); font-size: 0.75rem;">Supports PDF, DOCX, DOC, TXT</p>
+                </div>
+                <div id="dropZoneFile" style="display: none;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">&#9989;</div>
+                    <p id="fileName" style="color: var(--emerald); font-weight: 600;"></p>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.5rem;">Click to change file</p>
+                </div>
+                <input type="file" name="resume" id="resumeInput" accept=".pdf,.docx,.doc,.txt" style="display: none;">
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="proficiency">Proficiency Level</label>
-                <select name="proficiency" id="proficiency" class="form-select">
-                    <option value="Beginner">Beginner</option>
-                    <option value="Intermediate" selected>Intermediate</option>
-                    <option value="Advanced">Advanced</option>
-                    <option value="Expert">Expert</option>
-                </select>
-            </div>
-
-            <button type="submit" class="btn btn-primary" style="width: 100%;">Add Skill to Matrix</button>
+            <button type="submit" id="uploadBtn" class="btn btn-primary" style="width: 100%; margin-top: 1rem; opacity: 0.5; pointer-events: none;">
+                Analyze Resume & Extract Skills
+            </button>
         </form>
+
+        <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(6, 182, 212, 0.08); border-radius: var(--radius-sm); border: 1px solid rgba(6, 182, 212, 0.15);">
+            <p style="font-size: 0.8rem; color: var(--cyan-accent); margin: 0;">
+                <strong>How it works:</strong> We scan your resume for known technical skills and automatically add them to your skills matrix. You can adjust proficiency levels afterward.
+            </p>
+        </div>
     </div>
 </div>
 
-<!-- Active Candidate Skills Matrix -->
+<!-- Find Your Right Skill - Ikigai Career Counselor -->
+<section style="margin-top: 2.5rem;">
+    <a href="https://celeste-ai-career-counselor.netlify.app/" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+        <div class="glass-panel" style="padding: 2rem; display: flex; align-items: center; gap: 1.5rem; border: 1px solid rgba(245, 158, 11, 0.3); background: linear-gradient(135deg, rgba(17, 24, 39, 0.8), rgba(30, 41, 59, 0.6)); cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden;" onmouseover="this.style.borderColor='rgba(245, 158, 11, 0.7)'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 30px rgba(245, 158, 11, 0.2)'" onmouseout="this.style.borderColor='rgba(245, 158, 11, 0.3)'; this.style.transform=''; this.style.boxShadow=''">
+            <div style="position: absolute; top: 0; right: 0; width: 120px; height: 120px; background: radial-gradient(circle, rgba(245, 158, 11, 0.1) 0%, transparent 70%); pointer-events: none;"></div>
+            
+            <div style="width: 60px; height: 60px; border-radius: var(--radius-md); background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.15)); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0;">
+                &#127793;
+            </div>
+            
+            <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem;">
+                    <h3 style="font-size: 1.3rem; color: #fff; margin: 0;">Find My Right Skill</h3>
+                    <span style="background: linear-gradient(135deg, #F59E0B, #EF4444); color: #fff; font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: var(--radius-full); letter-spacing: 0.05em; text-transform: uppercase;">AI Powered</span>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0 0 0.4rem 0; line-height: 1.5;">
+                    Discover your ideal career path through psychological assessment based on <strong style="color: var(--amber);">Ikigai</strong> - find the intersection of what you love, what you're good at, what the world needs, and what you can be paid for.
+                </p>
+                <div style="display: flex; gap: 1.5rem; font-size: 0.8rem; color: var(--text-muted);">
+                    <span>&#10084; What you love</span>
+                    <span>&#9733; What you're good at</span>
+                    <span>&#127758; What world needs</span>
+                    <span>&#128176; What you can be paid for</span>
+                </div>
+            </div>
+            
+            <div style="flex-shrink: 0; text-align: center;">
+                <div style="background: linear-gradient(135deg, #F59E0B, #EF4444); color: #fff; padding: 0.75rem 1.5rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.95rem; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);">
+                    Start Assessment &#8594;
+                </div>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Takes ~5 minutes</p>
+            </div>
+        </div>
+    </a>
+</section>
+
+<!-- Manual Skill Add -->
+<section class="glass-panel" style="padding: 2rem; margin-top: 2rem;">
+    <h3 style="font-size: 1.3rem; color: #fff; margin-bottom: 1.25rem;">+ Add Skill Manually</h3>
+    
+    <form method="POST" action="{{ url_for('candidate.profile') }}" style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
+        <input type="hidden" name="action" value="add_skill">
+        
+        <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
+            <label class="form-label" for="skill_id">Select Skill</label>
+            <select name="skill_id" id="skill_id" class="form-select" required>
+                {% for s in all_skills %}
+                    <option value="{{ s.id }}" {% if s.id in user_skill_ids %}disabled{% endif %}>
+                        {{ s.name }} ({{ s.category }})
+                        {% if s.id in user_skill_ids %} - Added{% endif %}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group" style="min-width: 160px; margin-bottom: 0;">
+            <label class="form-label" for="proficiency">Proficiency</label>
+            <select name="proficiency" id="proficiency" class="form-select">
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate" selected>Intermediate</option>
+                <option value="Advanced">Advanced</option>
+                <option value="Expert">Expert</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="height: 44px;">Add Skill</button>
+    </form>
+</section>
+
+<!-- Active Skills Matrix -->
 <section style="margin-top: 3rem;">
-    <h3 style="font-size: 1.5rem; color: #fff; margin-bottom: 1.5rem;">Your Active Skills ({{ user_skills|length }})</h3>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.5rem; color: #fff;">Your Active Skills ({{ user_skills|length }})</h3>
+        
+        {% if user_skills %}
+            <div style="display: flex; gap: 0.5rem;">
+                <span class="badge badge-matched" style="font-size: 0.8rem;">
+                    Expert: {{ user_skills|selectattr('proficiency', 'equalto', 'Expert')|list|length }}
+                </span>
+                <span class="badge badge-domain" style="font-size: 0.8rem;">
+                    Advanced: {{ user_skills|selectattr('proficiency', 'equalto', 'Advanced')|list|length }}
+                </span>
+                <span class="badge badge-partial" style="font-size: 0.8rem;">
+                    Intermediate: {{ user_skills|selectattr('proficiency', 'equalto', 'Intermediate')|list|length }}
+                </span>
+                <span class="badge badge-missing" style="font-size: 0.8rem;">
+                    Beginner: {{ user_skills|selectattr('proficiency', 'equalto', 'Beginner')|list|length }}
+                </span>
+            </div>
+        {% endif %}
+    </div>
 
     {% if user_skills %}
         <div class="grid-3">
             {% for cs in user_skills %}
-                <div class="glass-panel" style="padding: 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+                <div class="glass-panel" style="padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease;" onmouseover="this.style.borderColor='rgba(99, 102, 241, 0.4)'" onmouseout="this.style.borderColor=''">
                     <div>
-                        <strong style="font-size: 1.1rem; color: #fff; display: block; margin-bottom: 0.2rem;">{{ cs.skill.name }}</strong>
-                        <span class="badge badge-domain" style="font-size: 0.75rem;">{{ cs.proficiency }}</span>
+                        <strong style="font-size: 1.1rem; color: #fff; display: block; margin-bottom: 0.3rem;">{{ cs.skill.name }}</strong>
+                        <span class="badge {% if cs.proficiency == 'Expert' %}badge-matched{% elif cs.proficiency == 'Advanced' %}badge-domain{% elif cs.proficiency == 'Intermediate' %}badge-partial{% else %}badge-missing{% endif %}" style="font-size: 0.75rem;">
+                            {{ cs.proficiency }}
+                        </span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: 0.4rem;">{{ cs.skill.category }}</span>
                     </div>
 
-                    <form method="POST" action="{{ url_for('candidate.remove_skill', candidate_skill_id=cs.id) }}">
-                        <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--rose); border-color: rgba(244, 63, 94, 0.3);" onclick="return confirm('Remove skill from profile?')">
-                            ✕ Remove
+                    <form method="POST" action="{{ url_for('candidate.profile') }}">
+                        <input type="hidden" name="action" value="delete_skill">
+                        <input type="hidden" name="candidate_skill_id" value="{{ cs.id }}">
+                        <button type="submit" class="btn btn-secondary btn-sm" style="color: var(--rose); border-color: rgba(244, 63, 94, 0.3); font-size: 0.8rem;" onclick="return confirm('Remove {{ cs.skill.name }} from your profile?')">
+                            &#10005;
                         </button>
                     </form>
                 </div>
             {% endfor %}
         </div>
     {% else %}
-        <div class="glass-panel" style="padding: 2.5rem; text-align: center; color: var(--text-muted);">
-            No skills added yet. Select from dropdown above to add your first technical skill!
+        <div class="glass-panel" style="padding: 3rem; text-align: center; color: var(--text-muted);">
+            <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.4;">&#128269;</div>
+            <p style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">No skills added yet</p>
+            <p style="font-size: 0.9rem;">Upload your resume above or add skills manually to get started!</p>
         </div>
     {% endif %}
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dropZone = document.getElementById('dropZone');
+    const resumeInput = document.getElementById('resumeInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const dropZoneContent = document.getElementById('dropZoneContent');
+    const dropZoneFile = document.getElementById('dropZoneFile');
+    const fileName = document.getElementById('fileName');
+
+    dropZone.addEventListener('click', () => resumeInput.click());
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = 'var(--primary)';
+        dropZone.style.background = 'rgba(99, 102, 241, 0.08)';
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.style.borderColor = '';
+        dropZone.style.background = '';
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '';
+        dropZone.style.background = '';
+        if (e.dataTransfer.files.length) {
+            resumeInput.files = e.dataTransfer.files;
+            handleFile(e.dataTransfer.files[0]);
+        }
+    });
+
+    resumeInput.addEventListener('change', () => {
+        if (resumeInput.files.length) {
+            handleFile(resumeInput.files[0]);
+        }
+    });
+
+    function handleFile(file) {
+        const allowed = ['pdf', 'docx', 'doc', 'txt'];
+        const ext = file.name.split('.').pop().toLowerCase();
+        
+        if (!allowed.includes(ext)) {
+            alert('Invalid file type. Please upload PDF, DOCX, DOC, or TXT files.');
+            resumeInput.value = '';
+            return;
+        }
+
+        fileName.textContent = file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+        dropZoneContent.style.display = 'none';
+        dropZoneFile.style.display = 'block';
+        uploadBtn.style.opacity = '1';
+        uploadBtn.style.pointerEvents = 'auto';
+        dropZone.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+    }
+
+    document.getElementById('resumeForm').addEventListener('submit', function() {
+        uploadBtn.innerHTML = '<span style="display: inline-block; animation: spin 1s linear infinite;">&#8635;</span> Analyzing...';
+        uploadBtn.style.pointerEvents = 'none';
+    });
+});
+</script>
+
+<style>
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+</style>
 {% endblock %}

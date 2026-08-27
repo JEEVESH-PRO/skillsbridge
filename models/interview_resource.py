@@ -1,14 +1,38 @@
-from models import db
+from models import QueryDescriptor
 
-class InterviewResource(db.Model):
-    __tablename__ = 'interview_resources'
 
-    id = db.Column(db.Integer, primary_key=True)
-    company_id = db.Column(db.Integer, db.ForeignKey('companies.id', ondelete='CASCADE'), nullable=False)
-    job_id = db.Column(db.Integer, db.ForeignKey('job_postings.id', ondelete='SET NULL'), nullable=True)
-    title = db.Column(db.String(200), nullable=False)
-    url = db.Column(db.String(500), nullable=False)
-    resource_type = db.Column(db.String(50), nullable=False) # Question Bank, System Design, HR Prep, Coding Prep
-    description = db.Column(db.Text)
+class InterviewResource:
+    _COLLECTION = 'interview_resources'
 
-    job = db.relationship('JobPosting', backref='interview_resources', lazy=True)
+    def __init__(self, id=None, company_id=None, job_id=None, title=None,
+                 url=None, resource_type=None, description=None):
+        self.id = id
+        self.company_id = company_id
+        self.job_id = job_id
+        self.title = title
+        self.url = url
+        self.resource_type = resource_type
+        self.description = description
+
+    @property
+    def company(self):
+        from models.company import Company
+        return Company.query.get(self.company_id)
+
+    query = QueryDescriptor()
+
+    def to_dict(self):
+        return {
+            'id': self.id, 'company_id': self.company_id, 'job_id': self.job_id,
+            'title': self.title, 'url': self.url,
+            'resource_type': self.resource_type, 'description': self.description,
+        }
+
+    @staticmethod
+    def from_dict(data, doc_id=None):
+        return InterviewResource(
+            id=doc_id or data.get('id'), company_id=data.get('company_id'),
+            job_id=data.get('job_id'), title=data.get('title'),
+            url=data.get('url'), resource_type=data.get('resource_type'),
+            description=data.get('description'),
+        )

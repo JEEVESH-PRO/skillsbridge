@@ -1,21 +1,58 @@
-from models import db
+from models import QueryDescriptor
 
-class Skill(db.Model):
-    __tablename__ = 'skills'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True, nullable=False)
-    category = db.Column(db.String(80), nullable=False, default='General')
+class Skill:
+    _COLLECTION = 'skills'
 
-    # Relationships
-    courses = db.relationship('Course', backref='skill', lazy=True, cascade='all, delete-orphan')
+    def __init__(self, id=None, name=None, category='General'):
+        self.id = id
+        self.name = name
+        self.category = category
 
-class CandidateSkill(db.Model):
-    __tablename__ = 'candidate_skills'
+    @property
+    def courses(self):
+        from models.course import Course
+        return Course.query.filter_by(skill_id=str(self.id))
 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
-    skill_id = db.Column(db.Integer, db.ForeignKey('skills.id', ondelete='CASCADE'), nullable=False)
-    proficiency = db.Column(db.String(50), nullable=False, default='Intermediate') # Beginner, Intermediate, Advanced, Expert
+    query = QueryDescriptor()
 
-    skill = db.relationship('Skill', backref='candidate_associations', lazy=True)
+    def to_dict(self):
+        return {'id': self.id, 'name': self.name, 'category': self.category}
+
+    @staticmethod
+    def from_dict(data, doc_id=None):
+        return Skill(id=doc_id or data.get('id'), name=data.get('name'), category=data.get('category', 'General'))
+
+
+class CandidateSkill:
+    _COLLECTION = 'candidate_skills'
+
+    def __init__(self, id=None, user_id=None, skill_id=None, proficiency='Intermediate'):
+        self.id = id
+        self.user_id = user_id
+        self.skill_id = skill_id
+        self.proficiency = proficiency
+        self._skill = None
+
+    @property
+    def skill(self):
+        if self._skill is None:
+            self._skill = Skill.query.get(self.skill_id)
+        return self._skill
+
+    @property
+    def user(self):
+        from models.user import User
+        return User.query.get(self.user_id)
+
+    query = QueryDescriptor()
+
+    def to_dict(self):
+        return {'id': self.id, 'user_id': self.user_id, 'skill_id': self.skill_id, 'proficiency': self.proficiency}
+
+    @staticmethod
+    def from_dict(data, doc_id=None):
+        return CandidateSkill(
+            id=doc_id or data.get('id'), user_id=data.get('user_id'),
+            skill_id=data.get('skill_id'), proficiency=data.get('proficiency', 'Intermediate'),
+        )

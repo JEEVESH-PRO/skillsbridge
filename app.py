@@ -1,19 +1,9 @@
 import os
-import sys
-
-# Import sqlite3 shim if needed
-try:
-    import sqlite3
-except ImportError:
-    import database.sqlite3_shim
-
-from flask import Flask, render_template, session, redirect, url_for
+from flask import Flask, render_template, session, url_for
 from config import Config
-from models import db
+from database.firestore_db import init_firestore
 from database.seed_data import seed_database
-from database.firebase_service import init_firebase
 
-# Import blueprints
 from routes.auth import auth_bp
 from routes.candidate import candidate_bp
 from routes.company_search import company_bp
@@ -23,12 +13,8 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    db.init_app(app)
+    init_firestore()
 
-    # Initialize Firebase Admin SDK (Cloud Firestore & Firebase Auth ready)
-    init_firebase()
-
-    # Register Blueprints
     app.register_blueprint(auth_bp)
     app.register_blueprint(candidate_bp)
     app.register_blueprint(company_bp)
@@ -46,19 +32,11 @@ def create_app():
             user = User.query.get(user_id)
 
         featured_companies = Company.query.limit(5).all()
-        recent_jobs = JobPosting.query.order_by(JobPosting.created_at.desc()).limit(4).all()
+        recent_jobs = JobPosting.query.all()[:4]
 
-        return render_template(
-            'landing.html',
-            user=user,
-            companies=featured_companies,
-            recent_jobs=recent_jobs
-        )
+        return render_template('landing.html', user=user, companies=featured_companies, recent_jobs=recent_jobs)
 
-    # Create tables & auto-seed on startup inside app context
-    with app.app_context():
-        db.create_all()
-        seed_database()
+    seed_database()
 
     return app
 

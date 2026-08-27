@@ -6,31 +6,45 @@ from models.user import User
 
 company_bp = Blueprint('company', __name__)
 
+
 def get_current_user():
     user_id = session.get('user_id')
     if user_id:
         return User.query.get(user_id)
     return None
 
+
 @company_bp.route('/companies')
 def company_list():
     query = request.args.get('q', '').strip()
+    companies = Company.query.all()
+
     if query:
-        companies = Company.query.filter(
-            (Company.name.ilike(f"%{query}%")) |
-            (Company.industry.ilike(f"%{query}%")) |
-            (Company.location.ilike(f"%{query}%"))
-        ).all()
-    else:
-        companies = Company.query.all()
+        q = query.lower()
+        companies = [
+            c for c in companies
+            if q in (c.name or '').lower()
+            or q in (c.industry or '').lower()
+            or q in (c.location or '').lower()
+        ]
+
+    companies = sorted(companies, key=lambda c: (c.name or '').lower())
 
     user = get_current_user()
     return render_template('company/list.html', companies=companies, query=query, user=user)
 
+
 @company_bp.route('/companies/<name>')
 def company_detail(name):
-    company = Company.query.filter(Company.name.ilike(name)).first_or_404()
-    jobs = JobPosting.query.filter_by(company_id=company.id).order_by(JobPosting.created_at.desc()).all()
+    companies = Company.query.all()
+    company = next((c for c in companies if (c.name or '').lower() == name.lower()), None)
+    if not company:
+        from flask import abort
+        abort(404)
+
+    jobs = JobPosting.query.filter_by(company_id=str(company.id)).all()
+    jobs.sort(key=lambda j: j.created_at or '', reverse=True)
+
     user = get_current_user()
 
     return render_template(

@@ -2,8 +2,15 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from models import db
 from models.user import User
 from models.company import Company
+from database.firestore_db import get_db
 
 auth_bp = Blueprint('auth', __name__)
+
+
+def _next_id(collection):
+    db = get_db()
+    return str(len(list(db.collection(collection).stream())) + 1)
+
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -21,9 +28,9 @@ def login():
                 return redirect(url_for('employer.dashboard'))
             return redirect(url_for('candidate.jobs'))
         else:
-            flash('Invalid email or password. Please try again.', 'error')
-
+            flash('Invalid email or password.', 'error')
     return render_template('auth/login.html')
+
 
 @auth_bp.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -46,16 +53,12 @@ def signup():
             return render_template('auth/signup.html', companies=companies)
 
         user = User(
-            name=name,
-            email=email,
-            role=role,
-            headline=headline or ('Job Candidate' if role == 'candidate' else 'Hiring Manager')
+            id=_next_id('users'),
+            name=name, email=email, role=role,
+            headline=headline or ('Job Candidate' if role == 'candidate' else 'Hiring Manager'),
+            company_id=int(company_id) if role == 'employer' and company_id else None
         )
         user.set_password(password)
-
-        if role == 'employer' and company_id:
-            user.company_id = int(company_id)
-
         db.session.add(user)
         db.session.commit()
 
@@ -67,8 +70,8 @@ def signup():
         if user.role == 'employer':
             return redirect(url_for('employer.dashboard'))
         return redirect(url_for('candidate.profile'))
-
     return render_template('auth/signup.html', companies=companies)
+
 
 @auth_bp.route('/logout')
 def logout():

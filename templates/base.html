@@ -83,6 +83,33 @@
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script src="{{ url_for('static', filename='js/skills.js') }}"></script>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+        import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCvETVDtoyj7KX6lzK2wsXKcs0_55xciew",
+            authDomain: "skillbridge-9f831.firebaseapp.com",
+            projectId: "skillbridge-9f831",
+            storageBucket: "skillbridge-9f831.firebasestorage.app",
+            messagingSenderId: "31640948232",
+            appId: "1:31640948232:web:2bf466c4543834293f8bbd",
+            measurementId: "G-5VNL3GKEKC"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        window.firebaseApp = app;
+        window.firebaseDb = db;
+        window.firebaseAuth = auth;
+        window.firebase = { getDocs, collection, addDoc };
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

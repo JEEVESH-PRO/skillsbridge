@@ -1,24 +1,22 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import db
+from models import QueryDescriptor
 
-class User(db.Model):
-    __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(256), nullable=False)
-    role = db.Column(db.String(20), nullable=False, default='candidate') # candidate / employer
-    headline = db.Column(db.String(200))
-    bio = db.Column(db.Text)
-    company_id = db.Column(db.Integer, db.ForeignKey('companies.id'), nullable=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+class User:
+    _COLLECTION = 'users'
 
-    # Relationships
-    candidate_skills = db.relationship('CandidateSkill', backref='user', lazy=True, cascade='all, delete-orphan')
-    applications = db.relationship('Application', backref='user', lazy=True, cascade='all, delete-orphan')
-    employer_company = db.relationship('Company', backref='employers', lazy=True)
+    def __init__(self, id=None, name=None, email=None, password_hash=None,
+                 role='candidate', headline=None, bio=None, company_id=None, created_at=None):
+        self.id = id
+        self.name = name
+        self.email = email
+        self.password_hash = password_hash
+        self.role = role
+        self.headline = headline
+        self.bio = bio
+        self.company_id = company_id
+        self.created_at = created_at or datetime.utcnow()
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password, method='pbkdf2:sha256')
@@ -31,3 +29,45 @@ class User(db.Model):
 
     def is_candidate(self):
         return self.role == 'candidate'
+
+    @property
+    def candidate_skills(self):
+        from models.skill import CandidateSkill
+        return CandidateSkill.query.filter_by(user_id=str(self.id))
+
+    @property
+    def applications(self):
+        from models.application import Application
+        return Application.query.filter_by(user_id=str(self.id))
+
+    @property
+    def employer_company(self):
+        if self.company_id:
+            from models.company import Company
+            return Company.query.get(self.company_id)
+        return None
+
+    query = QueryDescriptor()
+
+    def to_dict(self):
+        return {
+            'id': self.id, 'name': self.name, 'email': self.email,
+            'password_hash': self.password_hash, 'role': self.role,
+            'headline': self.headline, 'bio': self.bio, 'company_id': self.company_id,
+            'created_at': self.created_at.isoformat() if isinstance(self.created_at, datetime) else str(self.created_at),
+        }
+
+    @staticmethod
+    def from_dict(data, doc_id=None):
+        created = data.get('created_at')
+        if isinstance(created, str):
+            try:
+                created = datetime.fromisoformat(created)
+            except Exception:
+                created = datetime.utcnow()
+        return User(
+            id=doc_id or data.get('id'), name=data.get('name'), email=data.get('email'),
+            password_hash=data.get('password_hash'), role=data.get('role', 'candidate'),
+            headline=data.get('headline'), bio=data.get('bio'),
+            company_id=data.get('company_id'), created_at=created,
+        )
