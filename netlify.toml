@@ -22,7 +22,7 @@
 # Forward ALL traffic (including /static) to the Flask serverless function.
 # Flask serves /static/* from its bundled static folder, and every other path
 # is handled by the app routes. The secret service account key is NOT published
-# statically — it must be supplied via the FIREBASE_SERVICE_ACCOUNT_JSON env var.
+# statically. It must be supplied via the FIREBASE_SERVICE_ACCOUNT_JSON env var.
 [[redirects]]
   from = "/*"
   to = "/.netlify/functions/api"
