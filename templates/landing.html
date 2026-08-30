@@ -6,7 +6,7 @@
 <section style="padding: 3rem 0; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
     <!-- Landing Hero Logo Display -->
     <div style="margin-bottom: 0.5rem;">
-        <img src="{{ url_for('static', filename='images/skillsbridge-full-logo.png') }}?v=2.0" alt="SkillsBridge Platform" style="max-height: 90px; width: auto; object-fit: contain; filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.25));" onerror="this.style.display='none';">
+        <img src="{{ url_for('static', filename='images/skillsbridge-full-logo.png') }}?v=4.0" alt="SkillsBridge Platform" class="hero-logo-img" onerror="this.style.display='none';">
     </div>
 
     <div class="badge badge-domain" style="font-size: 0.9rem; padding: 0.4rem 1.2rem; background: rgba(255, 255, 255, 0.08); border-color: var(--border-silver); color: var(--silver-main);">
@@ -56,7 +56,7 @@
     <div style="display: flex; justify-content: center; align-items: center; gap: 2rem; flex-wrap: wrap;">
         {% for c in companies %}
             <a href="{{ url_for('company.company_detail', name=c.name) }}" class="glass-panel" style="padding: 1rem 1.8rem; display: flex; align-items: center; gap: 0.8rem; text-decoration: none; color: #fff;">
-                <img src="{{ c.logo_url }}" alt="{{ c.name }}" style="width: 32px; height: 32px; object-fit: contain;">
+                <img src="{{ c.logo_url }}" alt="{{ c.name }}" class="company-logo">
                 <span style="font-weight: 700; font-size: 1.1rem;">{{ c.name }}</span>
             </a>
         {% endfor %}

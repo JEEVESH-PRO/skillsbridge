@@ -7,20 +7,20 @@
     <meta name="description" content="SkillsBridge diagnoses candidate skill gaps with targeted learning, company interview prep, and direct job match analytics.">
     
     <!-- Favicons with Cache-Busting Query Parameter -->
-    <link rel="icon" type="image/png" sizes="64x64" href="{{ url_for('static', filename='images/skillsbridge-favicon-64.png') }}?v=3.0">
-    <link rel="icon" type="image/png" sizes="256x256" href="{{ url_for('static', filename='images/skillsbridge-favicon-256.png') }}?v=3.0">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/skillsbridge-square-logo.png') }}?v=3.0">
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ url_for('static', filename='images/skillsbridge-favicon-64.png') }}?v=4.0">
+    <link rel="icon" type="image/png" sizes="256x256" href="{{ url_for('static', filename='images/skillsbridge-favicon-256.png') }}?v=4.0">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/skillsbridge-square-logo.png') }}?v=4.0">
 
     <!-- CSS Stylesheets with Cache-Busting Query Parameter -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}?v=3.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=4.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}?v=4.0">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
 
     <!-- Animated Preloader -->
     <div id="preloader">
-        <img src="{{ url_for('static', filename='images/skillsbridge-square-logo.png') }}?v=3.0" alt="SkillsBridge" style="width: 75px; height: 75px; object-fit: contain; filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));">
+        <img src="{{ url_for('static', filename='images/skillsbridge-square-logo.png') }}?v=4.0" alt="SkillsBridge" style="width: 75px; height: 75px; object-fit: contain; filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));">
         <div class="spinner"></div>
         <div style="font-weight: 700; font-size: 1.2rem; color: #fff; letter-spacing: 0.05em;">
             SkillsBridge <span style="color: var(--silver-muted);">AI Platform</span>
@@ -30,7 +30,7 @@
     <!-- Header / Navbar -->
     <nav class="navbar">
         <a href="{{ url_for('landing') }}" class="nav-brand">
-            <img src="{{ url_for('static', filename='images/skillsbridge-navbar-logo.png') }}?v=3.0" alt="SkillsBridge Logo" class="brand-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+            <img src="{{ url_for('static', filename='images/skillsbridge-navbar-logo.png') }}?v=4.0" alt="SkillsBridge Logo" class="brand-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
             <span class="brand-badge" style="display: none;">SkillsBridge</span>
         </a>
 
@@ -129,13 +129,13 @@
     <!-- Footer with Full Logo -->
     <footer>
         <div style="display: flex; flex-direction: column; align-items: center; gap: 0.8rem; margin-bottom: 1.25rem;">
-            <img src="{{ url_for('static', filename='images/skillsbridge-full-logo.png') }}?v=3.0" alt="SkillsBridge Full Logo" style="height: 48px; width: auto; object-fit: contain; filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.25));" onerror="this.style.display='none';">
+            <img src="{{ url_for('static', filename='images/skillsbridge-full-logo.png') }}?v=4.0" alt="SkillsBridge Full Logo" class="footer-logo-img" onerror="this.style.display='none';">
         </div>
         <p>&copy; 2026 SkillsBridge • Black & Silver Metallic AI Career Platform</p>
     </footer>
 
-    <script src="{{ url_for('static', filename='js/main.js') }}?v=3.0"></script>
-    <script src="{{ url_for('static', filename='js/skills.js') }}?v=3.0"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}?v=4.0"></script>
+    <script src="{{ url_for('static', filename='js/skills.js') }}?v=4.0"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>
