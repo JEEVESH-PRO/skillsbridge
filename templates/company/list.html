@@ -29,7 +29,7 @@
         <div class="glass-panel" style="padding: 1.8rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1.25rem;">
             <div>
                 <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                    <img src="{{ comp.logo_url }}" alt="{{ comp.name }}" style="width: 52px; height: 52px; object-fit: contain; background: rgba(255, 255, 255, 0.05); padding: 8px; border-radius: var(--radius-sm);">
+                    <img src="{{ comp.logo_url }}" alt="{{ comp.name }}" class="company-logo">
                     <div>
                         <h3 style="font-size: 1.3rem; color: #fff; margin-bottom: 0.2rem;">
                             <a href="{{ url_for('company.company_detail', name=comp.name) }}">{{ comp.name }}</a>
