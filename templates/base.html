@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}SkillsBridge - Bridging Skill Gaps to Dream Careers{% endblock %}</title>
+    <title>{% block title %}SkillsBridge - Black & Silver Career AI Platform{% endblock %}</title>
     <meta name="description" content="SkillsBridge diagnoses candidate skill gaps with targeted learning, company interview prep, and direct job match analytics.">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ url_for('static', filename='images/skillsbridge-favicon-64.png') }}">
+    <link rel="icon" type="image/png" sizes="256x256" href="{{ url_for('static', filename='images/skillsbridge-favicon-256.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/skillsbridge-square-logo.png') }}">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
     {% block extra_css %}{% endblock %}
@@ -13,17 +19,18 @@
 
     <!-- Animated Preloader -->
     <div id="preloader">
+        <img src="{{ url_for('static', filename='images/skillsbridge-square-logo.png') }}" alt="SkillsBridge" style="width: 75px; height: 75px; object-fit: contain; filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));">
         <div class="spinner"></div>
         <div style="font-weight: 700; font-size: 1.2rem; color: #fff; letter-spacing: 0.05em;">
-            SkillsBridge <span style="color: var(--primary);">AI Engine</span>
+            SkillsBridge <span style="color: var(--silver-muted);">AI Platform</span>
         </div>
     </div>
 
     <!-- Header / Navbar -->
     <nav class="navbar">
         <a href="{{ url_for('landing') }}" class="nav-brand">
-            <span class="brand-badge">SkillsBridge</span>
-            <span>Career Engine</span>
+            <img src="{{ url_for('static', filename='images/skillsbridge-navbar-logo.png') }}" alt="SkillsBridge Logo" class="brand-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+            <span class="brand-badge" style="display: none;">SkillsBridge</span>
         </a>
 
         {% if session.get('user_id') %}
@@ -55,7 +62,7 @@
                         <div class="avatar-dropdown" id="avatarDropdownMenu">
                             <div class="dropdown-header">
                                 <strong style="color: #fff; display: block; font-size: 0.95rem;">{{ session.get('user_name') }}</strong>
-                                <span style="font-size: 0.75rem; color: var(--primary); text-transform: uppercase; font-weight: 600;">
+                                <span style="font-size: 0.75rem; color: var(--silver-muted); text-transform: uppercase; font-weight: 600;">
                                     {{ session.get('user_role') }}
                                 </span>
                             </div>
@@ -71,7 +78,6 @@
                             
                             <div style="border-top: 1px solid var(--border-glass); margin: 0.4rem 0;"></div>
                             
-                            <!-- Logout Button located inside Profile Dropdown -->
                             <a href="{{ url_for('auth.logout') }}" class="dropdown-item text-rose">
                                 🚪 Log Out
                             </a>
@@ -88,7 +94,7 @@
         {% endif %}
     </nav>
 
-    <!-- Flash Messages Container -->
+    <!-- Main Container -->
     <div class="main-wrapper">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -119,9 +125,12 @@
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer with Full Logo -->
     <footer>
-        <p>&copy; 2026 SkillsBridge • Real-Time AI Career Engine</p>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.8rem; margin-bottom: 1.25rem;">
+            <img src="{{ url_for('static', filename='images/skillsbridge-full-logo.png') }}" alt="SkillsBridge Full Logo" style="height: 48px; width: auto; object-fit: contain; filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.2));" onerror="this.style.display='none';">
+        </div>
+        <p>&copy; 2026 SkillsBridge • Black & Silver Metallic AI Career Platform</p>
     </footer>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
