@@ -20,11 +20,10 @@
 
     <!-- Animated Preloader -->
     <div id="preloader">
-        <img src="{{ url_for('static', filename='images/skillsbridge-square-logo.png') }}?v=4.0" alt="SkillsBridge" style="width: 75px; height: 75px; object-fit: contain; filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));">
-        <div class="spinner"></div>
-        <div style="font-weight: 700; font-size: 1.2rem; color: #fff; letter-spacing: 0.05em;">
-            SkillsBridge <span style="color: var(--silver-muted);">AI Platform</span>
+        <div class="preloader-brand">
+            <img src="{{ url_for('static', filename='images/skillsbridge-navbar-logo.png') }}?v=4.0" alt="SkillsBridge" class="preloader-logo-img">
         </div>
+        <div class="spinner"></div>
     </div>
 
     <!-- Header / Navbar -->
@@ -129,9 +128,9 @@
     <!-- Footer with Full Logo -->
     <footer>
         <div style="display: flex; flex-direction: column; align-items: center; gap: 0.8rem; margin-bottom: 1.25rem;">
-            <img src="{{ url_for('static', filename='images/skillsbridge-full-logo.png') }}?v=4.0" alt="SkillsBridge Full Logo" class="footer-logo-img" onerror="this.style.display='none';">
+            <img src="{{ url_for('static', filename='images/skillsbridge-navbar-logo.png') }}?v=4.0" alt="SkillsBridge Full Logo" class="footer-logo-img" onerror="this.style.display='none';">
         </div>
-        <p>&copy; 2026 SkillsBridge • Black & Silver Metallic AI Career Platform</p>
+        <p>&copy; 2026 SkillsBridge &bull; Black &amp; Silver Metallic AI Career Platform</p>
     </footer>
 
     <script src="{{ url_for('static', filename='js/main.js') }}?v=4.0"></script>
