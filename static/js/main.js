@@ -9,15 +9,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 preloader.classList.add('fade-out');
             }, 300);
         });
-        // Fallback hide in 2.5 seconds
+        // Fallback hide in 2 seconds
         setTimeout(() => {
             if (preloader && !preloader.classList.contains('fade-out')) {
                 preloader.classList.add('fade-out');
             }
-        }, 2500);
+        }, 2000);
     }
 
-    // 2. Profile Avatar Dropdown Toggle Handler
+    // 2. Mobile & Tablet Navigation Toggle Handler
+    const mobileBtn = document.getElementById('mobileNavBtn');
+    const navMenu = document.getElementById('navLinksMenu');
+
+    if (mobileBtn && navMenu) {
+        mobileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navMenu.classList.toggle('active');
+            mobileBtn.textContent = navMenu.classList.contains('active') ? '✕' : '☰';
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !mobileBtn.contains(e.target)) {
+                navMenu.classList.remove('active');
+                mobileBtn.textContent = '☰';
+            }
+        });
+    }
+
+    // 3. Profile Avatar Dropdown Toggle Handler
     const avatarBtn = document.getElementById('avatarDropdownBtn');
     const avatarDropdown = document.getElementById('avatarDropdownMenu');
 
@@ -34,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Auto-dismiss Flash Alerts
+    // 4. Auto-dismiss Flash Alerts
     const flashMessages = document.querySelectorAll('.flash-item');
     flashMessages.forEach(msg => {
         setTimeout(() => {
@@ -45,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 5000);
     });
 
-    // 4. Animate Radial Match Score Gauges
+    // 5. Animate Radial Match Score Gauges
     const gauges = document.querySelectorAll('.radial-gauge');
     gauges.forEach(gauge => {
         const score = parseInt(gauge.dataset.score || '0');
@@ -75,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 5. Modal Manager
+    // 6. Modal Manager
     window.openModal = function(modalId) {
         const modal = document.getElementById(modalId);
         if (modal) {

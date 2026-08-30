@@ -20,6 +20,13 @@ def create_app():
     app.register_blueprint(company_bp)
     app.register_blueprint(employer_bp)
 
+    @app.after_request
+    def add_header(response):
+        # Enable high-speed caching for static CSS/JS/images
+        if 'static' in str(response.headers.get('Content-Type', '')):
+            response.headers['Cache-Control'] = 'public, max-age=31536000'
+        return response
+
     @app.route('/')
     def landing():
         from models.user import User

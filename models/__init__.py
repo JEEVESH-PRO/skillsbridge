@@ -1,7 +1,26 @@
+import time
 from database.firestore_db import get_db
 from werkzeug.exceptions import NotFound
 from firebase_admin import firestore as _fs
 
+# Lightweight in-memory query cache for high-speed response (30s TTL)
+_QUERY_CACHE = {}
+_CACHE_TTL = 30  # seconds
+
+def _get_cache(key):
+    if key in _QUERY_CACHE:
+        val, ts = _QUERY_CACHE[key]
+        if time.time() - ts < _CACHE_TTL:
+            return val
+        del _QUERY_CACHE[key]
+    return None
+
+def _set_cache(key, val):
+    _QUERY_CACHE[key] = (val, time.time())
+
+def clear_query_cache():
+    global _QUERY_CACHE
+    _QUERY_CACHE = {}
 
 class _Query:
     def __init__(self, col, model_cls, wheres=None, order=None, limit_n=None):
@@ -36,6 +55,11 @@ class _Query:
         return self._clone(limit_n=n)
 
     def _run(self):
+        cache_key = (self._model.__name__, tuple(self._wheres), self._order, self._limit_n)
+        cached = _get_cache(cache_key)
+        if cached is not None:
+            return cached
+
         q = self._col
         for f, op, v in self._wheres:
             q = q.where(f, op, v)
@@ -44,7 +68,10 @@ class _Query:
             q = q.order_by(name, _fs.Query.DESCENDING if d == 'desc' else _fs.Query.ASCENDING)
         if self._limit_n is not None:
             q = q.limit(self._limit_n)
-        return [self._model.from_dict(d.to_dict(), doc_id=d.id) for d in q.stream()]
+        
+        results = [self._model.from_dict(d.to_dict(), doc_id=d.id) for d in q.stream()]
+        _set_cache(cache_key, results)
+        return results
 
     def first(self):
         r = self._clone(limit_n=1)._run()
@@ -76,10 +103,19 @@ class Query:
         return get_db().collection(self._col_name)
 
     def get(self, obj_id):
+        if not obj_id:
+            return None
+        cache_key = (self._model.__name__, 'get', str(obj_id))
+        cached = _get_cache(cache_key)
+        if cached is not None:
+            return cached
+
         doc = self._colref().document(str(obj_id)).get()
+        res = None
         if doc.exists:
-            return self._model.from_dict(doc.to_dict(), doc_id=doc.id)
-        return None
+            res = self._model.from_dict(doc.to_dict(), doc_id=doc.id)
+        _set_cache(cache_key, res)
+        return res
 
     def get_or_404(self, obj_id):
         obj = self.get(obj_id)
@@ -131,6 +167,7 @@ class _Session:
                 if obj:
                     db.collection(obj._COLLECTION).document(str(obj.id)).set(obj.to_dict(), merge=True)
         self._pending = []
+        clear_query_cache()
 
 
 class QueryDescriptor:
