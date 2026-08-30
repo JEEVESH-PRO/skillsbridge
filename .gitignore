@@ -13,6 +13,9 @@ skillsbridge.db
 uploads/
 .netlify/
 
+# Backup of original logo images
+static/images/_backup/
+
 # Secrets & Service Accounts
 firebase_service_account.json
 *service_account*.json
