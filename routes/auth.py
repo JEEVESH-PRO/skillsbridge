@@ -1,3 +1,4 @@
+import uuid
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from models import db
 from models.user import User
@@ -8,8 +9,8 @@ auth_bp = Blueprint('auth', __name__)
 
 
 def _next_id(collection):
-    db = get_db()
-    return str(len(list(db.collection(collection).stream())) + 1)
+    # Fast 10-char unique ID generation without streaming entire collection over network
+    return f"{collection[:3]}_{uuid.uuid4().hex[:8]}"
 
 
 @auth_bp.route('/login', methods=['GET', 'POST'])

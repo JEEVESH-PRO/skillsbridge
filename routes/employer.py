@@ -1,3 +1,4 @@
+import uuid
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from models import db
 from models.user import User
@@ -6,7 +7,6 @@ from models.job import JobPosting, JobSkillRequirement
 from models.skill import Skill
 from models.application import Application
 from models.course import Course
-from database.firestore_db import get_db
 
 employer_bp = Blueprint('employer', __name__)
 
@@ -21,8 +21,7 @@ def get_current_employer():
 
 
 def _next_id(collection):
-    db = get_db()
-    return str(len(list(db.collection(collection).stream())) + 1)
+    return f"{collection[:3]}_{uuid.uuid4().hex[:8]}"
 
 
 @employer_bp.route('/employer/dashboard')

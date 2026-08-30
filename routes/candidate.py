@@ -8,7 +8,7 @@ from models.application import Application
 from models.course import Course
 from models.interview_resource import InterviewResource
 from ml.gap_analysis import analyze_skill_gap
-from ml.resume_parser import auto_update_candidate_skills
+from ml.resume_parser import auto_update_candidate_skills, extract_text_from_file
 
 candidate_bp = Blueprint('candidate', __name__)
 
@@ -45,7 +45,7 @@ def profile():
             if skill_id:
                 existing = CandidateSkill.query.filter_by(user_id=str(user.id), skill_id=str(skill_id)).first()
                 if not existing:
-                    cs_id = f"{user.id}_{skill_id}"
+                    cs_id = f"cs_{user.id}_{skill_id}"
                     cs = CandidateSkill(id=cs_id, user_id=str(user.id), skill_id=str(skill_id), proficiency=proficiency)
                     db.session.add(cs)
                     db.session.commit()
@@ -81,22 +81,20 @@ def profile():
 def parse_resume():
     user = get_current_user()
     if not user:
-        return jsonify({'success': False, 'message': 'Authentication required.'}), 401
+        flash('Authentication required.', 'error')
+        return redirect(url_for('auth.login'))
 
     resume_text = request.form.get('resume_text', '')
     
-    # Handle uploaded resume file (.txt, .pdf, etc.)
+    # Handle uploaded resume file (.txt, .pdf, .docx)
     if 'resume_file' in request.files:
         file = request.files['resume_file']
         if file and file.filename:
-            try:
-                content = file.read().decode('utf-8', errors='ignore')
-                resume_text += "\n" + content
-            except Exception:
-                pass
+            extracted_file_text = extract_text_from_file(file)
+            resume_text += "\n" + extracted_file_text
 
     if not resume_text.strip():
-        flash('Please paste resume text or upload a document to parse skills.', 'error')
+        flash('Please paste resume text or upload a PDF/Word/TXT document to extract skills.', 'error')
         return redirect(url_for('candidate.profile'))
 
     updated_skills = auto_update_candidate_skills(user.id, resume_text)
@@ -219,7 +217,7 @@ def apply_job(job_id):
 
     analysis = analyze_skill_gap(user, job)
     
-    app_id = f"{user.id}_{job.id}"
+    app_id = f"app_{user.id}_{job.id}"
     app = Application(
         id=app_id,
         user_id=str(user.id),
