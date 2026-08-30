@@ -1,149 +1,296 @@
 from database.firestore_db import get_db
-from werkzeug.security import generate_password_hash
-from datetime import datetime
-
 
 def seed_database():
     db = get_db()
-    if not db:
-        print("[Seed] Firestore not available.")
-        return
-
     existing = list(db.collection('users').limit(1).stream())
     if existing:
-        print("[Seed] Database already contains data. Skipping.")
+        print("[Seed] Firestore database already contains data. Skipping.")
         return
 
-    # 1. Companies
+    print("[Seed] Seeding real-time companies, skills, jobs, and courses into Firestore...")
+
+    # 1. Companies Data categorized by Product-Based, Service-Based, AI/DeepTech, Fintech, Semiconductors
     companies_data = [
-        {"name": "Google", "industry": "Artificial Intelligence & Cloud", "location": "Mountain View, CA / Remote", "logo_url": "https://img.icons8.com/color/144/google-logo.png", "description": "Google's mission is to organize the world's information and make it universally accessible and useful.", "website": "https://careers.google.com"},
-        {"name": "Microsoft", "industry": "Enterprise Software & AI", "location": "Redmond, WA / Hybrid", "logo_url": "https://img.icons8.com/color/144/microsoft.png", "description": "Empowering every person and every organization on the planet to achieve more.", "website": "https://careers.microsoft.com"},
-        {"name": "Meta", "industry": "Social Infrastructure & Metaverse", "location": "Menlo Park, CA / Remote", "logo_url": "https://img.icons8.com/color/144/meta.png", "description": "Meta builds technologies that help people connect and grow businesses.", "website": "https://metacareers.com"},
-        {"name": "Amazon", "industry": "Cloud & E-Commerce", "location": "Seattle, WA / Hybrid", "logo_url": "https://img.icons8.com/color/144/amazon.png", "description": "Pioneering cloud architecture via AWS and machine learning infrastructure.", "website": "https://amazon.jobs"},
-        {"name": "Stripe", "industry": "Financial Infrastructure", "location": "San Francisco, CA / Remote", "logo_url": "https://img.icons8.com/color/144/stripe.png", "description": "Stripe is a financial infrastructure platform for businesses.", "website": "https://stripe.com/jobs"},
+        # Product-Based IT
+        {
+            "id": "1", "name": "Google", "industry": "Product-Based IT", "location": "Mountain View, CA / Remote",
+            "logo_url": "https://img.icons8.com/color/144/google-logo.png",
+            "description": "Global technology giant specializing in search, cloud infrastructure, AI models, and consumer products.",
+            "website": "https://careers.google.com"
+        },
+        {
+            "id": "2", "name": "Microsoft", "industry": "Product-Based IT", "location": "Redmond, WA / Hybrid",
+            "logo_url": "https://img.icons8.com/color/144/microsoft.png",
+            "description": "Empowering every person and organization through Azure cloud, OpenAI partnership, Windows, and enterprise tools.",
+            "website": "https://careers.microsoft.com"
+        },
+        {
+            "id": "3", "name": "Meta", "industry": "Product-Based IT", "location": "Menlo Park, CA / Remote",
+            "logo_url": "https://img.icons8.com/color/144/meta.png",
+            "description": "Pioneering AI open source (Llama), social networks (Instagram, WhatsApp, Threads), and metaverse hardware.",
+            "website": "https://metacareers.com"
+        },
+        {
+            "id": "4", "name": "Apple", "industry": "Product-Based IT", "location": "Cupertino, CA / Hybrid",
+            "logo_url": "https://img.icons8.com/color/144/apple-logo.png",
+            "description": "World-leading hardware and software engineering powering iOS, macOS, Apple Silicon, and AI ecosystem.",
+            "website": "https://jobs.apple.com"
+        },
+        {
+            "id": "5", "name": "Amazon", "industry": "Product-Based IT", "location": "Seattle, WA / Hybrid",
+            "logo_url": "https://img.icons8.com/color/144/amazon.png",
+            "description": "Global e-commerce leader and cloud innovator operating AWS, Bedrock AI, and automated logistics.",
+            "website": "https://amazon.jobs"
+        },
+        {
+            "id": "6", "name": "OpenAI", "industry": "AI & DeepTech", "location": "San Francisco, CA / Hybrid",
+            "logo_url": "https://img.icons8.com/ios-filled/150/ffffff/chatgpt.png",
+            "description": "AI research and deployment company behind ChatGPT, GPT-4, and frontier generative AI models.",
+            "website": "https://openai.com/careers"
+        },
+        
+        # Service-Based IT & Consulting
+        {
+            "id": "7", "name": "TCS (Tata Consultancy Services)", "industry": "Service-Based IT", "location": "Mumbai, India / Global",
+            "logo_url": "https://img.icons8.com/color/144/briefcase.png",
+            "description": "Leading global IT services, consulting, and business solutions enterprise operating in 55+ countries.",
+            "website": "https://www.tcs.com/careers"
+        },
+        {
+            "id": "8", "name": "Infosys", "industry": "Service-Based IT", "location": "Bengaluru, India / Global",
+            "logo_url": "https://img.icons8.com/color/144/company.png",
+            "description": "Global leader in next-generation digital services, cloud transformation, and enterprise consulting.",
+            "website": "https://www.infosys.com/careers"
+        },
+        {
+            "id": "9", "name": "Accenture", "industry": "Service-Based IT", "location": "Dublin, Ireland / Global",
+            "logo_url": "https://img.icons8.com/color/144/accenture.png",
+            "description": "Leading global professional services company specializing in digital, cloud, cybersecurity, and AI strategy.",
+            "website": "https://www.accenture.com/careers"
+        },
+        {
+            "id": "10", "name": "Cognizant", "industry": "Service-Based IT", "location": "Teaneck, NJ / Global",
+            "logo_url": "https://img.icons8.com/color/144/organization.png",
+            "description": "Engineers modern business models to modernize technology, reimagine processes, and transform customer experiences.",
+            "website": "https://www.cognizant.com/careers"
+        },
+
+        # Fintech
+        {
+            "id": "11", "name": "Stripe", "industry": "Fintech", "location": "San Francisco, CA / Remote",
+            "logo_url": "https://img.icons8.com/color/144/stripe.png",
+            "description": "Financial infrastructure platform for businesses, powering payments, subscriptions, and banking services worldwide.",
+            "website": "https://stripe.com/jobs"
+        },
+
+        # Semiconductors & DeepTech
+        {
+            "id": "12", "name": "NVIDIA", "industry": "Hardware & Semiconductors", "location": "Santa Clara, CA / Hybrid",
+            "logo_url": "https://img.icons8.com/color/144/nvidia.png",
+            "description": "Inventor of the GPU, powering modern generative AI, supercomputing, autonomous machines, and omniverse.",
+            "website": "https://www.nvidia.com/careers"
+        }
     ]
 
-    company_ids = {}
-    for i, c in enumerate(companies_data, 1):
-        cid = str(i)
-        company_ids[c["name"]] = cid
-        db.collection('companies').document(cid).set({"id": cid, **c})
+    for c in companies_data:
+        db.collection('companies').document(c['id']).set(c)
 
-    # 2. Skills
-    skills_list = [
-        ("Python", "Programming Languages"), ("Flask", "Web Development"), ("React", "Frontend"),
-        ("JavaScript", "Programming Languages"), ("TypeScript", "Programming Languages"), ("SQL", "Database"),
-        ("PostgreSQL", "Database"), ("Docker", "DevOps & Cloud"), ("Kubernetes", "DevOps & Cloud"),
-        ("PyTorch", "Machine Learning / AI"), ("TensorFlow", "Machine Learning / AI"),
-        ("Machine Learning", "Machine Learning / AI"), ("AWS", "DevOps & Cloud"),
-        ("System Design", "Core Computer Science"), ("Data Structures & Algorithms", "Core Computer Science"),
-        ("Node.js", "Backend"), ("GraphQL", "API Design"), ("Redis", "Database & Caching"),
-        ("Git", "Tools"), ("UI/UX Design", "Design"),
+    # 2. Global Technical Skills Dictionary
+    skills_data = [
+        ("1", "Python", "Programming Languages"),
+        ("2", "JavaScript", "Programming Languages"),
+        ("3", "TypeScript", "Programming Languages"),
+        ("4", "Java", "Programming Languages"),
+        ("5", "C++", "Programming Languages"),
+        ("6", "Go", "Programming Languages"),
+        ("7", "Rust", "Programming Languages"),
+        ("8", "SQL", "Database"),
+        ("9", "Flask", "Web Development"),
+        ("10", "React", "Frontend"),
+        ("11", "Next.js", "Frontend"),
+        ("12", "Node.js", "Backend"),
+        ("13", "Docker", "DevOps & Cloud"),
+        ("14", "Kubernetes", "DevOps & Cloud"),
+        ("15", "PyTorch", "Machine Learning / AI"),
+        ("16", "TensorFlow", "Machine Learning / AI"),
+        ("17", "Machine Learning", "Machine Learning / AI"),
+        ("18", "AWS", "DevOps & Cloud"),
+        ("19", "PostgreSQL", "Database"),
+        ("20", "Redis", "Database & Caching"),
+        ("21", "System Design", "Core Computer Science"),
+        ("22", "Data Structures & Algorithms", "Core Computer Science"),
+        ("23", "GraphQL", "API Design"),
+        ("24", "Git", "Tools"),
+        ("25", "UI/UX Design", "Design")
     ]
 
-    skill_ids = {}
-    for i, (name, cat) in enumerate(skills_list, 1):
-        sid = str(i)
-        skill_ids[name] = sid
-        db.collection('skills').document(sid).set({"id": sid, "name": name, "category": cat})
+    for sk_id, name, cat in skills_data:
+        db.collection('skills').document(sk_id).set({"id": sk_id, "name": name, "category": cat})
 
-    # 3. Users
-    cand_hash = generate_password_hash("password123", method='pbkdf2:sha256')
-    db.collection('users').document("1").set({
+    # 3. Seed Candidate & Employer Users
+    from werkzeug.security import generate_password_hash
+    cand_user = {
         "id": "1", "name": "Alex Johnson", "email": "candidate@skillsbridge.com",
-        "password_hash": cand_hash, "role": "candidate",
-        "headline": "Full Stack Software Engineer & ML Enthusiast",
-        "bio": "Passionate developer eager to upskill.", "company_id": None,
-        "created_at": datetime.utcnow().isoformat(),
-    })
+        "password_hash": generate_password_hash("password123", method="pbkdf2:sha256"),
+        "role": "candidate", "headline": "Full Stack Developer & AI Enthusiast",
+        "bio": "Passionate software engineer building web apps and deep learning models.",
+        "company_id": None, "created_at": "2026-08-27T00:00:00"
+    }
+    db.collection('users').document("1").set(cand_user)
 
-    emp1_hash = generate_password_hash("password123", method='pbkdf2:sha256')
-    db.collection('users').document("2").set({
+    google_emp = {
         "id": "2", "name": "Sarah Jenkins", "email": "recruiter@google.com",
-        "password_hash": emp1_hash, "role": "employer",
-        "headline": "Senior Tech Recruiter at Google AI & Cloud",
-        "bio": "Hiring top-tier engineering talent.", "company_id": company_ids["Google"],
-        "created_at": datetime.utcnow().isoformat(),
-    })
+        "password_hash": generate_password_hash("password123", method="pbkdf2:sha256"),
+        "role": "employer", "headline": "Senior Engineering Recruiter at Google",
+        "bio": "Hiring top backend, cloud, and AI engineering talent for Google Search and AI.",
+        "company_id": "1", "created_at": "2026-08-27T00:00:00"
+    }
+    db.collection('users').document("2").set(google_emp)
 
-    emp2_hash = generate_password_hash("password123", method='pbkdf2:sha256')
-    db.collection('users').document("3").set({
+    msft_emp = {
         "id": "3", "name": "David Chen", "email": "recruiter@microsoft.com",
-        "password_hash": emp2_hash, "role": "employer",
-        "headline": "Engineering Hiring Lead at Microsoft Azure",
-        "bio": "Building the future of distributed systems.", "company_id": company_ids["Microsoft"],
-        "created_at": datetime.utcnow().isoformat(),
-    })
+        "password_hash": generate_password_hash("password123", method="pbkdf2:sha256"),
+        "role": "employer", "headline": "Hiring Manager at Microsoft Azure",
+        "bio": "Building scalable cloud computing platforms and developer tools.",
+        "company_id": "2", "created_at": "2026-08-27T00:00:00"
+    }
+    db.collection('users').document("3").set(msft_emp)
 
-    # 4. Candidate skills for Alex
-    alex_skills = [("Python", "Advanced"), ("JavaScript", "Intermediate"), ("SQL", "Intermediate"), ("Flask", "Intermediate"), ("Git", "Advanced")]
-    for i, (sk_name, prof) in enumerate(alex_skills, 1):
-        db.collection('candidate_skills').document(str(i)).set({
-            "id": str(i), "user_id": "1", "skill_id": skill_ids[sk_name], "proficiency": prof,
-        })
+    # Candidate Initial Skills
+    cand_skills = [
+        ("1_1", "1", "1", "Advanced"),    # Python
+        ("1_2", "1", "2", "Intermediate"),# JS
+        ("1_8", "1", "8", "Intermediate"),# SQL
+        ("1_9", "1", "9", "Intermediate"),# Flask
+        ("1_24", "1", "24", "Advanced")   # Git
+    ]
+    for cs_id, uid, sid, prof in cand_skills:
+        db.collection('candidate_skills').document(cs_id).set({"id": cs_id, "user_id": uid, "skill_id": sid, "proficiency": prof})
 
-    # 5. Job postings
+    # 4. Job Postings across categories
     jobs_data = [
-        {"cid": company_ids["Google"], "title": "Software Engineer II - Cloud Backend", "domain": "Backend Engineering", "exp": "2-4 yrs", "loc": "Mountain View, CA / Hybrid", "sal": "$140,000 - $185,000 / yr", "desc": "Design scalable distributed backend systems processing millions of operations per second.", "skills": [("Python", "Advanced"), ("SQL", "Intermediate"), ("Docker", "Intermediate"), ("System Design", "Advanced"), ("Redis", "Intermediate")]},
-        {"cid": company_ids["Google"], "title": "Machine Learning Engineer - AI Research", "domain": "AI / Machine Learning", "exp": "3-5 yrs", "loc": "San Francisco, CA / Remote", "sal": "$160,000 - $210,000 / yr", "desc": "Build state-of-the-art neural architecture models and optimize LLM inference pipelines.", "skills": [("Python", "Expert"), ("PyTorch", "Advanced"), ("TensorFlow", "Advanced"), ("Machine Learning", "Advanced"), ("Data Structures & Algorithms", "Advanced")]},
-        {"cid": company_ids["Microsoft"], "title": "Full Stack Engineer - Azure Cloud Studio", "domain": "Software Development", "exp": "1-3 yrs", "loc": "Redmond, WA / Hybrid", "sal": "$125,000 - $165,000 / yr", "desc": "Building next-generation cloud developer tooling with React, TypeScript, and Node.js.", "skills": [("React", "Advanced"), ("TypeScript", "Intermediate"), ("Node.js", "Intermediate"), ("GraphQL", "Intermediate"), ("AWS", "Intermediate")]},
-        {"cid": company_ids["Meta"], "title": "Senior Frontend Engineer - React Infrastructure", "domain": "Frontend Engineering", "exp": "4+ yrs", "loc": "Menlo Park, CA / Remote", "sal": "$175,000 - $230,000 / yr", "desc": "Architect core React web framework libraries powering Instagram and Facebook.", "skills": [("React", "Expert"), ("JavaScript", "Expert"), ("TypeScript", "Advanced"), ("UI/UX Design", "Intermediate")]},
-        {"cid": company_ids["Amazon"], "title": "DevOps / Infrastructure Engineer - AWS Platform", "domain": "DevOps & Cloud", "exp": "2-5 yrs", "loc": "Seattle, WA / Remote", "sal": "$135,000 - $175,000 / yr", "desc": "Manage containerization pipelines, Kubernetes clusters, and Terraform infrastructure.", "skills": [("AWS", "Advanced"), ("Docker", "Advanced"), ("Kubernetes", "Advanced"), ("Python", "Intermediate")]},
-        {"cid": company_ids["Stripe"], "title": "Backend Systems Engineer - Financial Core", "domain": "Backend Engineering", "exp": "2-4 yrs", "loc": "San Francisco, CA / Remote", "sal": "$150,000 - $190,000 / yr", "desc": "Develop mission-critical payment processing pipelines with sub-10ms response times.", "skills": [("Python", "Advanced"), ("PostgreSQL", "Advanced"), ("System Design", "Advanced"), ("Redis", "Intermediate")]},
+        {
+            "id": "1", "company_id": "1", "title": "Software Engineer II - Cloud Backend",
+            "domain": "Product-Based IT", "experience_required": "2-4 yrs", "location": "Mountain View, CA / Remote",
+            "salary_range": "$140,000 - $185,000 / yr",
+            "description": "Architect scalable distributed microservices processing millions of RPCs per second for Google Cloud Platform."
+        },
+        {
+            "id": "2", "company_id": "6", "title": "Research Engineer - LLM & Reasoning",
+            "domain": "AI & DeepTech", "experience_required": "3-5 yrs", "location": "San Francisco, CA / Hybrid",
+            "salary_range": "$220,000 - $350,000 / yr",
+            "description": "Train frontier generative models, optimize distributed GPU cluster inference, and design agentic architectures."
+        },
+        {
+            "id": "3", "company_id": "2", "title": "Full Stack Cloud Developer - Azure Studio",
+            "domain": "Product-Based IT", "experience_required": "1-3 yrs", "location": "Redmond, WA / Hybrid",
+            "salary_range": "$125,000 - $165,000 / yr",
+            "description": "Building developer infrastructure tools powered by React, TypeScript, Node.js, and Azure microservices."
+        },
+        {
+            "id": "4", "company_id": "7", "title": "Senior Technical Lead - Enterprise Cloud",
+            "domain": "Service-Based IT", "experience_required": "5+ yrs", "location": "Bengaluru, India / Remote",
+            "salary_range": "₹24,00,000 - ₹35,00,000 / yr",
+            "description": "Leading global client migration to cloud-native microservices architecture, CI/CD automation, and DevOps."
+        },
+        {
+            "id": "5", "company_id": "11", "title": "Backend Systems Engineer - Financial Core",
+            "domain": "Fintech", "experience_required": "2-4 yrs", "location": "San Francisco, CA / Remote",
+            "salary_range": "$150,000 - $190,000 / yr",
+            "description": "Develop mission-critical payment processing pipelines with sub-10ms response times and fault tolerance."
+        },
+        {
+            "id": "6", "company_id": "12", "title": "CUDA Systems & Parallel Compiler Engineer",
+            "domain": "Hardware & Semiconductors", "experience_required": "3+ yrs", "location": "Santa Clara, CA / Hybrid",
+            "salary_range": "$180,000 - $240,000 / yr",
+            "description": "Optimize low-level GPU acceleration, CUDA kernels, and deep learning compiler backends for AI hardware."
+        }
     ]
 
-    from datetime import datetime as _dt
-    for i, jd in enumerate(jobs_data, 1):
-        jid = str(i)
-        db.collection('job_postings').document(jid).set({
-            "id": jid, "company_id": jd["cid"], "title": jd["title"], "domain": jd["domain"],
-            "experience_required": jd["exp"], "location": jd["loc"], "salary_range": jd["sal"],
-            "description": jd["desc"], "created_at": datetime.utcnow().isoformat(),
-        })
-        for j, (sk_name, lvl) in enumerate(jd["skills"], 1):
-            rid = f"{i}_{j}"
-            db.collection('job_skill_requirements').document(rid).set({
-                "id": rid, "job_id": jid, "skill_id": skill_ids[sk_name], "required_level": lvl,
-            })
+    for j in jobs_data:
+        db.collection('job_postings').document(j['id']).set(j)
 
-    # 6. Courses
+    # Job Skill Requirements
+    job_reqs = [
+        # Job 1 (Google Cloud)
+        ("1_1", "1", "1", "Advanced"),     # Python
+        ("1_8", "1", "8", "Intermediate"), # SQL
+        ("1_13", "1", "13", "Intermediate"),# Docker
+        ("1_21", "1", "21", "Advanced"),   # System Design
+        ("1_20", "1", "20", "Intermediate"),# Redis
+
+        # Job 2 (OpenAI)
+        ("2_1", "2", "1", "Expert"),       # Python
+        ("2_15", "2", "15", "Advanced"),   # PyTorch
+        ("2_16", "2", "16", "Advanced"),   # TensorFlow
+        ("2_17", "2", "17", "Advanced"),   # Machine Learning
+        ("2_22", "2", "22", "Advanced"),   # DSA
+
+        # Job 3 (Microsoft)
+        ("3_10", "3", "10", "Advanced"),   # React
+        ("3_3", "3", "3", "Intermediate"), # TypeScript
+        ("3_12", "3", "12", "Intermediate"),# Node.js
+        ("3_18", "3", "18", "Intermediate"),# AWS
+
+        # Job 4 (TCS)
+        ("4_18", "4", "18", "Advanced"),   # AWS
+        ("4_13", "4", "13", "Advanced"),   # Docker
+        ("4_14", "4", "14", "Advanced"),   # Kubernetes
+        ("4_1", "4", "1", "Intermediate"), # Python
+
+        # Job 5 (Stripe)
+        ("5_1", "5", "1", "Advanced"),     # Python
+        ("5_19", "5", "19", "Advanced"),   # PostgreSQL
+        ("5_21", "5", "21", "Advanced"),   # System Design
+        ("5_20", "5", "20", "Intermediate"),# Redis
+
+        # Job 6 (NVIDIA)
+        ("5_5", "6", "5", "Expert"),       # C++
+        ("5_1", "6", "1", "Advanced"),     # Python
+        ("5_22", "6", "22", "Advanced")    # DSA
+    ]
+
+    for req_id, jid, sid, req_lvl in job_reqs:
+        db.collection('job_skill_requirements').document(req_id).set({"id": req_id, "job_id": jid, "skill_id": sid, "required_level": req_lvl})
+
+    # 5. Courses Data
     courses_data = [
-        {"skill": "Docker", "title": "Docker for Absolute Beginners & DevOps Integration", "provider": "YouTube Tech", "type": "youtube", "url": "https://www.youtube.com/watch?v=fqMOX6JJhGo", "duration": "3 Hours", "diff": "Beginner"},
-        {"skill": "Docker", "title": "Complete Docker Masterclass: From Zero to Container Hero", "provider": "Coursera", "type": "platform", "url": "https://www.coursera.org/learn/docker-containers", "duration": "4 Weeks", "diff": "Intermediate"},
-        {"skill": "Docker", "title": "Google Cloud Containerization Specialist", "provider": "Google", "type": "company", "url": "https://cloud.google.com/training/containers", "duration": "2 Weeks", "diff": "Advanced"},
-        {"skill": "System Design", "title": "System Design Primer & Scalable Architecture Blueprint", "provider": "GitHub Community", "type": "platform", "url": "https://github.com/donnemartin/system-design-primer", "duration": "Self-Paced", "diff": "Advanced"},
-        {"skill": "System Design", "title": "High-Volume Backend Architecture Crash Course", "provider": "YouTube", "type": "youtube", "url": "https://www.youtube.com/watch?v=xpDnVSmNfx0", "duration": "4 Hours", "diff": "Intermediate"},
-        {"skill": "PyTorch", "title": "PyTorch for Deep Learning & Neural Networks Bootcamp", "provider": "freeCodeCamp", "type": "youtube", "url": "https://www.youtube.com/watch?v=V_xro1bcAuA", "duration": "10 Hours", "diff": "Intermediate"},
-        {"skill": "PyTorch", "title": "Google AI Deep Learning Specialization", "provider": "Google", "type": "company", "url": "https://ai.google/education/", "duration": "6 Weeks", "diff": "Advanced"},
-        {"skill": "Kubernetes", "title": "Kubernetes Architecture & Production Cluster Administration", "provider": "edX", "type": "platform", "url": "https://www.edx.org/course/introduction-to-kubernetes", "duration": "5 Weeks", "diff": "Intermediate"},
-        {"skill": "Kubernetes", "title": "K8s Hands-on Deployment Tutorial", "provider": "YouTube", "type": "youtube", "url": "https://www.youtube.com/watch?v=X48VuDVv0do", "duration": "4 Hours", "diff": "Beginner"},
-        {"skill": "React", "title": "React 18 & Redux Toolkit Full Course", "provider": "YouTube", "type": "youtube", "url": "https://www.youtube.com/watch?v=bMknfKXIFA8", "duration": "12 Hours", "diff": "Beginner"},
-        {"skill": "React", "title": "Meta Front-End Developer Professional Certificate", "provider": "Meta", "type": "company", "url": "https://www.coursera.org/professional-certificates/meta-front-end-developer", "duration": "8 Weeks", "diff": "Intermediate"},
-        {"skill": "Redis", "title": "Redis In-Memory Caching & Pub-Sub Deep Dive", "provider": "Redis University", "type": "platform", "url": "https://university.redis.com/", "duration": "2 Weeks", "diff": "Intermediate"},
-        {"skill": "PostgreSQL", "title": "Advanced SQL & Relational Database Design", "provider": "Udemy", "type": "platform", "url": "https://www.udemy.com/course/sql-and-postgresql/", "duration": "3 Weeks", "diff": "Intermediate"},
+        {"id": "1", "skill_id": "13", "title": "Docker Containerization & Kubernetes Mastery", "provider": "Coursera", "source_type": "platform", "url": "https://www.coursera.org/learn/docker-containers", "duration": "4 Weeks", "difficulty": "Intermediate"},
+        {"id": "2", "skill_id": "13", "title": "Docker for Absolute Beginners", "provider": "YouTube", "source_type": "youtube", "url": "https://www.youtube.com/watch?v=fqMOX6JJhGo", "duration": "3 Hours", "difficulty": "Beginner"},
+        {"id": "3", "skill_id": "21", "title": "System Design Primer & High Scale Systems", "provider": "GitHub Community", "source_type": "platform", "url": "https://github.com/donnemartin/system-design-primer", "duration": "Self-Paced", "difficulty": "Advanced"},
+        {"id": "4", "skill_id": "15", "title": "PyTorch for Deep Learning & Neural Networks", "provider": "freeCodeCamp", "source_type": "youtube", "url": "https://www.youtube.com/watch?v=V_xro1bcAuA", "duration": "10 Hours", "difficulty": "Intermediate"},
+        {"id": "5", "skill_id": "10", "title": "React 18 & Next.js Full Stack Development", "provider": "YouTube", "source_type": "youtube", "url": "https://www.youtube.com/watch?v=bMknfKXIFA8", "duration": "12 Hours", "difficulty": "Intermediate"},
+        {"id": "6", "skill_id": "14", "title": "Kubernetes Cluster Administration", "provider": "edX", "source_type": "platform", "url": "https://www.edx.org/course/introduction-to-kubernetes", "duration": "5 Weeks", "difficulty": "Intermediate"}
     ]
 
-    for i, cd in enumerate(courses_data, 1):
-        db.collection('courses').document(str(i)).set({
-            "id": str(i), "skill_id": skill_ids[cd["skill"]], "title": cd["title"],
-            "provider": cd["provider"], "source_type": cd["type"], "url": cd["url"],
-            "duration": cd["duration"], "difficulty": cd["diff"], "employer_id": None,
-        })
+    for c in courses_data:
+        db.collection('courses').document(c['id']).set(c)
 
-    # 7. Interview resources
-    interview_res = [
-        {"cid": company_ids["Google"], "title": "Google Technical Interview Cheat Sheet (Coding + DSA)", "url": "https://careers.google.com/how-we-hire/interview/", "type": "Coding Prep", "desc": "Official Google guide covering algorithmic problem solving and live coding."},
-        {"cid": company_ids["Google"], "title": "Google System Design & Distributed Systems Round", "url": "https://github.com/checkcheckzz/system-design-interview", "type": "System Design", "desc": "Real questions asked during Google Cloud and Search system design rounds."},
-        {"cid": company_ids["Google"], "title": "Google Leadership Principles & Behavioral Questions", "url": "https://www.google.com/about/careers/applications/interview-tips/", "type": "HR Prep", "desc": "Googleliness and leadership question framework using STAR technique."},
-        {"cid": company_ids["Microsoft"], "title": "Microsoft Technical Phone Screen & Onsite Guide", "url": "https://careers.microsoft.com/v2/global/en/hiring-process.html", "type": "Question Bank", "desc": "Detailed overview of Microsoft technical rounds and live whiteboarding."},
-        {"cid": company_ids["Meta"], "title": "Meta Product Architecture & React Deep Dive", "url": "https://metacareers.com/prep/", "type": "Coding Prep", "desc": "Speed coding tips, binary tree traversals, and frontend system architecture."},
-        {"cid": company_ids["Stripe"], "title": "Stripe Integration & Bug Bash Practical Round", "url": "https://stripe.com/jobs/tech-interview-prep", "type": "Coding Prep", "desc": "Hands-on API debugging and refactoring round expectations at Stripe."},
+    # 6. Interview Resources
+    interview_data = [
+        {
+            "id": "1", "company_id": "1", "title": "Google Technical Interview Cheat Sheet (Coding + DSA)",
+            "url": "https://careers.google.com/how-we-hire/interview/", "resource_type": "Coding Prep",
+            "description": "Official Google guide covering algorithmic problem solving, time complexity analysis, and live coding expectations."
+        },
+        {
+            "id": "2", "company_id": "1", "title": "Google System Design & Distributed Systems Blueprint",
+            "url": "https://github.com/checkcheckzz/system-design-interview", "resource_type": "System Design",
+            "description": "Real questions asked during Google Cloud and Search system design rounds."
+        },
+        {
+            "id": "3", "company_id": "6", "title": "OpenAI Machine Learning & PyTorch Deep Dive",
+            "url": "https://openai.com/research/", "resource_type": "AI Prep",
+            "description": "Neural architecture, LLM fine-tuning, and CUDA memory optimization guides."
+        },
+        {
+            "id": "4", "company_id": "2", "title": "Microsoft Technical Phone Screen & Onsite Guide",
+            "url": "https://careers.microsoft.com/v2/global/en/hiring-process.html", "resource_type": "Question Bank",
+            "description": "Detailed overview of Microsoft technical rounds and OOP design challenges."
+        }
     ]
 
-    for i, ir in enumerate(interview_res, 1):
-        db.collection('interview_resources').document(str(i)).set({
-            "id": str(i), "company_id": ir["cid"], "job_id": None, "title": ir["title"],
-            "url": ir["url"], "resource_type": ir["type"], "description": ir["desc"],
-        })
+    for ir in interview_data:
+        db.collection('interview_resources').document(ir['id']).set(ir)
 
     print("[Seed] Firestore database successfully seeded!")

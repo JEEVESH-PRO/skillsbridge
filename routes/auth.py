@@ -20,7 +20,7 @@ def login():
 
         user = User.query.filter_by(email=email).first()
         if user and user.check_password(password):
-            session['user_id'] = user.id
+            session['user_id'] = str(user.id)
             session['user_name'] = user.name
             session['user_role'] = user.role
             flash(f'Welcome back, {user.name}!', 'success')
@@ -52,17 +52,18 @@ def signup():
             flash('An account with this email already exists.', 'error')
             return render_template('auth/signup.html', companies=companies)
 
+        user_id = _next_id('users')
         user = User(
-            id=_next_id('users'),
+            id=user_id,
             name=name, email=email, role=role,
             headline=headline or ('Job Candidate' if role == 'candidate' else 'Hiring Manager'),
-            company_id=int(company_id) if role == 'employer' and company_id else None
+            company_id=str(company_id) if role == 'employer' and company_id else None
         )
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
 
-        session['user_id'] = user.id
+        session['user_id'] = str(user.id)
         session['user_name'] = user.name
         session['user_role'] = user.role
         flash('Account created successfully!', 'success')

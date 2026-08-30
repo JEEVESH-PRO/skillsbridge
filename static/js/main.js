@@ -1,7 +1,40 @@
 /* SkillsBridge Main UI Interaction Script */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Auto-dismiss Flash Alerts
+    // 1. Hide Preloader on Window Load
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                preloader.classList.add('fade-out');
+            }, 300);
+        });
+        // Fallback hide in 2.5 seconds
+        setTimeout(() => {
+            if (preloader && !preloader.classList.contains('fade-out')) {
+                preloader.classList.add('fade-out');
+            }
+        }, 2500);
+    }
+
+    // 2. Profile Avatar Dropdown Toggle Handler
+    const avatarBtn = document.getElementById('avatarDropdownBtn');
+    const avatarDropdown = document.getElementById('avatarDropdownMenu');
+
+    if (avatarBtn && avatarDropdown) {
+        avatarBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            avatarDropdown.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!avatarDropdown.contains(e.target) && !avatarBtn.contains(e.target)) {
+                avatarDropdown.classList.remove('active');
+            }
+        });
+    }
+
+    // 3. Auto-dismiss Flash Alerts
     const flashMessages = document.querySelectorAll('.flash-item');
     flashMessages.forEach(msg => {
         setTimeout(() => {
@@ -12,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 5000);
     });
 
-    // 2. Animate Radial Match Score Gauges
+    // 4. Animate Radial Match Score Gauges
     const gauges = document.querySelectorAll('.radial-gauge');
     gauges.forEach(gauge => {
         const score = parseInt(gauge.dataset.score || '0');
@@ -20,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const text = gauge.querySelector('.radial-text');
         
         if (circle && text) {
-            const circumference = 2 * Math.PI * 40; // radius = 40
+            const circumference = 2 * Math.PI * 40;
             const offset = circumference - (score / 100) * circumference;
             circle.style.strokeDasharray = `${circumference}`;
             
@@ -29,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 text.textContent = `${score}%`;
             }, 100);
 
-            // Apply color classes
             if (score >= 80) {
                 circle.classList.add('score-high');
                 text.classList.add('score-high');
@@ -43,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 3. Modal Manager
+    // 5. Modal Manager
     window.openModal = function(modalId) {
         const modal = document.getElementById(modalId);
         if (modal) {
@@ -60,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Close modal on click outside
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) {
