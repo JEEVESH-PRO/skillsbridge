@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from models import db
 from models.user import User
 from models.company import Company
-from database.firestore_db import get_db
+# firestore removed
 
 auth_bp = Blueprint('auth', __name__)
 

@@ -1,8 +1,7 @@
 import os
 from flask import Flask, render_template, session, url_for
 from config import Config
-from database.firestore_db import init_firestore
-from database.seed_data import seed_database
+from database import sqlite_db, sqlite_seed
 
 from routes.auth import auth_bp
 from routes.candidate import candidate_bp
@@ -13,7 +12,8 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    init_firestore()
+    sqlite_db.init_db()
+    sqlite_seed.seed_database()
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(candidate_bp)
@@ -38,16 +38,16 @@ def create_app():
         if user_id:
             user = User.query.get(user_id)
 
-        featured_companies = Company.query.limit(5).all()
-        recent_jobs = JobPosting.query.all()[:4]
+        recent_jobs = JobPosting.query.all()
+        if len(recent_jobs) > 6:
+            recent_jobs = recent_jobs[:6]
 
-        return render_template('landing.html', user=user, companies=featured_companies, recent_jobs=recent_jobs)
+        companies = Company.query.all()[:8]
 
-    seed_database()
+        return render_template('landing.html', user=user, recent_jobs=recent_jobs, companies=companies)
 
     return app
 
-app = create_app()
-
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000, debug=False, use_reloader=False)
+    app = create_app()
+    app.run(host='0.0.0.0', port=5000, debug=True)
