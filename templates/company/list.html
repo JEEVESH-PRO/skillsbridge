@@ -1,52 +1,53 @@
 {% extends "base.html" %}
 
-{% block title %}Browse Global Companies & Hiring Partners - SkillsBridge{% endblock %}
+{% block title %}Hiring Directory & Engineering Teams — SkillsBridge{% endblock %}
 
 {% block content %}
-<div style="margin-bottom: 2rem;">
-    <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff;">Global Tech Companies & Industry Categories</h1>
-    <p style="color: var(--text-muted);">Explore hiring partners, IT product-based giants, service-based consultants, AI labs, and hardware leaders</p>
+<div style="margin-bottom: 2.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem;">
+    <span class="mono-meta" style="color: var(--accent); margin-bottom: 0.35rem; display: block;">PARTNER DIRECTORY</span>
+    <h1>Global Engineering Teams</h1>
+    <p>Product leaders, cloud infrastructure providers, AI research labs, and enterprise systems architects.</p>
 </div>
 
-<!-- Search & Category Filter Pills Bar -->
-<div class="glass-panel" style="padding: 1.5rem; margin-bottom: 2.5rem;">
+<!-- Search & Category Filter Bar -->
+<div class="editorial-panel" style="padding: 1.25rem 1.5rem; margin-bottom: 2.5rem; background: var(--surface);">
     <form method="GET" action="{{ url_for('company.company_list') }}" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
-        <input type="text" name="q" value="{{ search_query }}" class="form-input" placeholder="Search by company name, industry, or location..." style="flex: 1; min-width: 250px;">
+        <input type="text" name="q" value="{{ search_query }}" class="form-input" placeholder="Search by organization name, sector, or headquarters..." style="flex: 1; min-width: 240px;">
         <select name="category" class="form-select" style="width: auto; min-width: 220px;" onchange="this.form.submit()">
             {% for cat in categories %}
                 <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
             {% endfor %}
         </select>
-        <button type="submit" class="btn btn-primary">Filter Companies</button>
+        <button type="submit" class="btn btn-primary">Filter Directory</button>
         {% if search_query or selected_category != 'All' %}
-            <a href="{{ url_for('company.company_list') }}" class="btn btn-secondary">Clear Filters</a>
+            <a href="{{ url_for('company.company_list') }}" class="btn btn-secondary">Reset</a>
         {% endif %}
     </form>
 </div>
 
 <div class="grid-3">
     {% for comp in companies %}
-        <div class="glass-panel" style="padding: 1.8rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1.25rem;">
+        <div class="editorial-panel" style="padding: 1.75rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1.25rem;">
             <div>
-                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                    <img src="{{ comp.logo_url }}" alt="{{ comp.name }}" class="company-logo">
+                <div style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;">
+                    <img src="{{ comp.logo_url }}" alt="{{ comp.name }}" class="company-logo" style="width: 40px; height: 40px; min-width: 40px; padding: 4px;">
                     <div>
-                        <h3 style="font-size: 1.3rem; color: #fff; margin-bottom: 0.2rem;">
+                        <h3 style="font-size: 1.15rem; color: var(--text-main); margin-bottom: 0.2rem;">
                             <a href="{{ url_for('company.company_detail', name=comp.name) }}">{{ comp.name }}</a>
                         </h3>
-                        <span class="badge badge-domain" style="font-size: 0.75rem;">{{ comp.industry }}</span>
+                        <span class="badge badge-domain" style="font-size: 0.65rem;">{{ comp.industry }}</span>
                     </div>
                 </div>
 
-                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">
-                    {{ comp.description[:120] }}...
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.55;">
+                    {{ comp.description[:130] }}...
                 </p>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-glass); padding-top: 1rem;">
-                <span style="font-size: 0.85rem; color: var(--text-sub);">📍 {{ comp.location }}</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 1rem;">
+                <span class="mono-meta" style="font-size: 0.7rem; color: var(--text-dim);">LOC: {{ comp.location }}</span>
                 <a href="{{ url_for('company.company_detail', name=comp.name) }}" class="btn btn-secondary btn-sm">
-                    View Openings →
+                    Open Roles →
                 </a>
             </div>
         </div>

@@ -3,112 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}SkillsBridge - Ultra-Glassmorphic Career Platform{% endblock %}</title>
-    <meta name="description" content="SkillsBridge diagnoses candidate skill gaps with targeted learning, company interview prep, and direct job match analytics.">
+    <title>{% block title %}SkillsBridge — Technical Competency Ledger & Syllabus Engine{% endblock %}</title>
+    <meta name="description" content="SkillsBridge maps candidate competency matrices against live production engineering requirements to diagnose exact syllabus deltas.">
     
     <!-- Favicons -->
-    <link rel="icon" type="image/png" sizes="64x64" href="{{ url_for('static', filename='images/skillsbridge-favicon-64.png') }}?v=5.0">
-    <link rel="icon" type="image/png" sizes="256x256" href="{{ url_for('static', filename='images/skillsbridge-favicon-256.png') }}?v=5.0">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/skillsbridge-square-logo.png') }}?v=5.0">
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ url_for('static', filename='images/skillsbridge-favicon-64.png') }}?v=6.0">
+    <link rel="icon" type="image/png" sizes="256x256" href="{{ url_for('static', filename='images/skillsbridge-favicon-256.png') }}?v=6.0">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/skillsbridge-square-logo.png') }}?v=6.0">
 
-    <!-- CSS Stylesheets -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=5.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}?v=5.0">
+    <!-- Design System Stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=6.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}?v=6.0">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
 
-    <!-- Animated Preloader -->
+    <!-- Hairline System Loading Indicator (Non-blocking) -->
     <div id="preloader">
-        <img src="{{ url_for('static', filename='images/skillsbridge-square-logo.png') }}?v=5.0" alt="SkillsBridge" style="width: 75px; height: 75px; object-fit: contain; filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));">
-        <div class="spinner"></div>
-        <div style="font-weight: 700; font-size: 1.2rem; color: #fff; letter-spacing: 0.05em;">
-            SkillsBridge <span style="color: var(--silver-muted);">AI Platform</span>
-        </div>
+        <div class="progress-track"></div>
     </div>
 
-    <!-- Header / Navbar -->
+    <!-- Editorial Header / Navigation -->
     <nav class="navbar">
         <a href="{{ url_for('landing') }}" class="nav-brand">
-            <img src="{{ url_for('static', filename='images/skillsbridge-navbar-logo.png') }}?v=5.0" alt="SkillsBridge Logo" class="brand-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
-            <span class="brand-badge" style="display: none;">SkillsBridge</span>
+            <span class="brand-symbol">SB</span>
+            <div class="brand-text-block">
+                <span class="brand-title">SkillsBridge</span>
+                <span class="brand-edition">COMPETENCY ATLAS // 2026</span>
+            </div>
         </a>
 
-        <!-- Mobile & Tablet Hamburger Toggle Button -->
-        <button class="mobile-menu-btn" id="mobileNavBtn" type="button" aria-label="Toggle Mobile Navigation">
+        <!-- Mobile & Tablet Hamburger Toggle -->
+        <button class="mobile-menu-btn" id="mobileNavBtn" type="button" aria-label="Toggle Navigation">
             ☰
         </button>
 
         {% if session.get('user_id') %}
-            <!-- Logged-in App Navigation Links -->
+            <!-- Authenticated Ledger Navigation -->
             <ul class="nav-links" id="navLinksMenu">
-                <li><a href="{{ url_for('candidate.jobs') }}" class="nav-link">Jobs & Openings</a></li>
+                <li><a href="{{ url_for('candidate.jobs') }}" class="nav-link">Job Catalog</a></li>
                 <li><a href="{{ url_for('company.company_list') }}" class="nav-link">Companies</a></li>
                 
                 {% if session.get('user_role') == 'candidate' %}
-                    <li><a href="{{ url_for('candidate.profile') }}" class="nav-link">My Skills Matrix</a></li>
+                    <li><a href="{{ url_for('candidate.profile') }}" class="nav-link">Skills Matrix</a></li>
                     <li><a href="{{ url_for('candidate.applications') }}" class="nav-link">Applications</a></li>
-                    <li><a href="{{ url_for('candidate.learning') }}" class="nav-link">Learning Hub</a></li>
+                    <li><a href="{{ url_for('candidate.learning') }}" class="nav-link">Syllabus Hub</a></li>
                 {% else %}
-                    <li><a href="{{ url_for('employer.dashboard') }}" class="nav-link">Employer Hub</a></li>
-                    <li><a href="{{ url_for('employer.post_job') }}" class="nav-link">+ Post Job</a></li>
+                    <li><a href="{{ url_for('employer.dashboard') }}" class="nav-link">Employer Ledger</a></li>
+                    <li><a href="{{ url_for('employer.post_job') }}" class="nav-link">+ Post Opening</a></li>
                 {% endif %}
 
-                <!-- Profile Picture Widget Dropdown in Top Right Navbar -->
+                <!-- Profile Badge & Menu -->
                 <li style="position: relative;">
                     <div class="profile-avatar-widget">
                         <button class="avatar-btn" id="avatarDropdownBtn" type="button">
-                            <div class="avatar-badge">
-                                {{ (session.get('user_name') or 'U')[0].upper() }}
-                            </div>
+                            <span class="avatar-badge">{{ (session.get('user_name') or 'U')[0].upper() }}</span>
                             <span class="avatar-name">{{ session.get('user_name') }}</span>
-                            <span style="font-size: 0.75rem; color: var(--text-muted);">▼</span>
+                            <span style="font-size: 0.65rem; color: var(--text-dim); margin-left: 2px;">↓</span>
                         </button>
 
                         <div class="avatar-dropdown" id="avatarDropdownMenu">
                             <div class="dropdown-header">
-                                <strong style="color: #fff; display: block; font-size: 0.95rem;">{{ session.get('user_name') }}</strong>
-                                <span style="font-size: 0.75rem; color: var(--silver-muted); text-transform: uppercase; font-weight: 600;">
-                                    {{ session.get('user_role') }}
+                                <span style="color: var(--text-main); font-weight: 600; display: block; font-size: 0.88rem;">{{ session.get('user_name') }}</span>
+                                <span class="mono-meta" style="color: var(--accent); font-size: 0.65rem;">
+                                    ACCOUNT // {{ session.get('user_role')|upper }}
                                 </span>
                             </div>
 
                             {% if session.get('user_role') == 'candidate' %}
-                                <a href="{{ url_for('candidate.profile') }}" class="dropdown-item">👤 My Profile & Matrix</a>
-                                <a href="{{ url_for('candidate.applications') }}" class="dropdown-item">💼 My Applications</a>
-                                <a href="{{ url_for('candidate.learning') }}" class="dropdown-item">🎓 Learning Hub</a>
+                                <a href="{{ url_for('candidate.profile') }}" class="dropdown-item">Competency Matrix</a>
+                                <a href="{{ url_for('candidate.applications') }}" class="dropdown-item">Submissions & Tracking</a>
+                                <a href="{{ url_for('candidate.learning') }}" class="dropdown-item">Assigned Coursework</a>
                             {% else %}
-                                <a href="{{ url_for('employer.dashboard') }}" class="dropdown-item">📊 Employer Dashboard</a>
-                                <a href="{{ url_for('employer.post_job') }}" class="dropdown-item">➕ Post Opening</a>
+                                <a href="{{ url_for('employer.dashboard') }}" class="dropdown-item">Hiring Dashboard</a>
+                                <a href="{{ url_for('employer.post_job') }}" class="dropdown-item">Create Job Specification</a>
                             {% endif %}
                             
-                            <div style="border-top: 1px solid var(--border-glass); margin: 0.4rem 0;"></div>
+                            <div style="border-top: 1px solid var(--border); margin: 0.3rem 0;"></div>
                             
                             <a href="{{ url_for('auth.logout') }}" class="dropdown-item text-rose">
-                                🚪 Log Out
+                                Sign Out
                             </a>
                         </div>
                     </div>
                 </li>
             </ul>
         {% else %}
-            <!-- Unauthenticated Visitor Navigation -->
+            <!-- Public Navigation -->
             <ul class="nav-links" id="navLinksMenu">
-                <li><a href="{{ url_for('auth.login') }}" class="btn btn-secondary btn-sm">Login</a></li>
-                <li><a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-sm">Sign Up</a></li>
+                <li><a href="{{ url_for('candidate.jobs') }}" class="nav-link">Explore Roles</a></li>
+                <li><a href="{{ url_for('company.company_list') }}" class="nav-link">Directory</a></li>
+                <li><a href="{{ url_for('auth.login') }}" class="btn btn-secondary btn-sm">Sign In</a></li>
+                <li><a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-sm">Create Account</a></li>
             </ul>
         {% endif %}
     </nav>
 
-    <!-- Main Container -->
-    <div class="main-wrapper">
+    <!-- Main Viewport -->
+    <main class="main-wrapper">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="flash-messages">
                     {% for category, message in messages %}
                         <div class="flash-item flash-{{ category }}">
                             <span>{{ message }}</span>
-                            <span style="cursor: pointer;" onclick="this.parentElement.remove()">✕</span>
+                            <button type="button" style="background: none; border: none; color: inherit; cursor: pointer; font-size: 0.9rem;" onclick="this.parentElement.remove()">✕</button>
                         </div>
                     {% endfor %}
                 </div>
@@ -116,13 +115,16 @@
         {% endwith %}
 
         {% block content %}{% endblock %}
-    </div>
+    </main>
 
-    <!-- Universal Source Course Modal -->
+    <!-- Coursework Sourcing Dialog -->
     <div class="modal-overlay" id="sourceModal">
         <div class="modal-container">
             <div class="modal-header">
-                <h3 class="modal-title" id="sourceModalTitle">Curated Upskilling Courses</h3>
+                <div>
+                    <span class="mono-meta" style="color: var(--accent);">RECOMMENDED CURRICULUM</span>
+                    <h3 class="modal-title" id="sourceModalTitle" style="margin-top: 0.2rem;">Targeted Upskilling Modules</h3>
+                </div>
                 <button class="close-btn" onclick="closeModal('sourceModal')">&times;</button>
             </div>
             <div id="sourceModalContent">
@@ -131,16 +133,47 @@
         </div>
     </div>
 
-    <!-- Footer with Full Logo -->
+    <!-- Considered Colophon Footer -->
     <footer>
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.8rem; margin-bottom: 1.25rem;">
-            <img src="{{ url_for('static', filename='images/skillsbridge-full-logo.png') }}?v=5.0" alt="SkillsBridge Full Logo" class="footer-logo-img" onerror="this.style.display='none';">
+        <div class="footer-inner">
+            <div class="footer-colophon">
+                <div style="display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.8rem;">
+                    <span class="brand-symbol" style="width: 24px; height: 24px; font-size: 0.65rem;">SB</span>
+                    <strong style="color: var(--text-main); font-size: 0.95rem; letter-spacing: -0.02em;">SkillsBridge</strong>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                    An engineering competency ledger. We diagnose the delta between candidate project history and production-level requirements, providing verified roadmaps to close the gap.
+                </p>
+            </div>
+
+            <div>
+                <span class="mono-meta" style="display: block; margin-bottom: 0.85rem;">NAVIGATION INDEX</span>
+                <ul class="footer-meta-list">
+                    <li><a href="{{ url_for('candidate.jobs') }}">ROLES</a></li>
+                    <li><a href="{{ url_for('company.company_list') }}">COMPANIES</a></li>
+                    <li><a href="{{ url_for('auth.login') }}">AUTHENTICATION</a></li>
+                    <li><a href="{{ url_for('landing') }}">SPECIMEN</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <span class="mono-meta" style="display: block; margin-bottom: 0.85rem;">TELEMETRY</span>
+                <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-dim); line-height: 1.8;">
+                    <div>PLATFORM // RELEASE 2026.4</div>
+                    <div>DATABASE // FIRESTORE SYNC ACTIVE</div>
+                    <div>LATENCY // SUB-10MS IN-MEMORY CACHE</div>
+                </div>
+            </div>
         </div>
-        <p>&copy; 2026 SkillsBridge • Black & Silver Metallic AI Career Platform</p>
+
+        <div class="footer-bottom">
+            <span>© 2026 SKILLSBRIDGE CORP. ALL TELEMETRY ARCHITECTED FOR ACCURACY.</span>
+            <span>INDEX NO. SB-883-PRODUCTION</span>
+        </div>
     </footer>
 
-    <script src="{{ url_for('static', filename='js/main.js') }}?v=5.0"></script>
-    <script src="{{ url_for('static', filename='js/skills.js') }}?v=5.0"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}?v=6.0"></script>
+    <script src="{{ url_for('static', filename='js/skills.js') }}?v=6.0"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

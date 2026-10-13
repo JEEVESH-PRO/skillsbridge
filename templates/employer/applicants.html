@@ -1,39 +1,37 @@
 {% extends "base.html" %}
 
-{% block title %}Applicants for {{ job.title }} - SkillsBridge{% endblock %}
+{% block title %}Applicants // {{ job.title }} — SkillsBridge{% endblock %}
 
 {% block content %}
-<div style="margin-bottom: 2rem;">
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
-        <div>
-            <span class="badge badge-domain" style="margin-bottom: 0.5rem;">Applicant Review Panel</span>
-            <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff;">{{ job.title }}</h1>
-            <p style="color: var(--text-muted);">Company: <strong>{{ job.company.name }}</strong> • Total Applicants: <strong>{{ applicants|length }}</strong></p>
-        </div>
-
-        <a href="{{ url_for('employer.dashboard') }}" class="btn btn-secondary">← Back to Dashboard</a>
+<div style="margin-bottom: 2.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <span class="mono-meta" style="color: var(--accent); margin-bottom: 0.35rem; display: block;">REQUISITION REVIEW // ID #{{ job.id }}</span>
+        <h1>{{ job.title }}</h1>
+        <p>Organization: <strong>{{ job.company.name }}</strong> • Total Submissions: <strong>{{ applicants|length }}</strong></p>
     </div>
+
+    <a href="{{ url_for('employer.dashboard') }}" class="btn btn-secondary btn-sm">← Back to Ledger</a>
 </div>
 
 {% if applicants %}
-    <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+    <div style="display: flex; flex-direction: column; gap: 0.85rem;">
         {% for item in applicants %}
             {% set app = item.application %}
-            <div class="glass-panel" style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
-                <div style="display: flex; align-items: center; gap: 1.25rem;">
-                    <div style="width: 50px; height: 50px; border-radius: var(--radius-full); background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; color: #fff;">
+            <div class="editorial-panel" style="padding: 1.5rem 1.75rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+                <div style="display: flex; align-items: flex-start; gap: 1.25rem;">
+                    <div class="brand-symbol" style="width: 44px; height: 44px; font-size: 1.1rem; font-weight: 700;">
                         {{ item.candidate.name[0] }}
                     </div>
                     <div>
-                        <h3 style="font-size: 1.2rem; color: #fff; margin-bottom: 0.2rem;">{{ item.candidate.name }}</h3>
-                        <div style="font-size: 0.85rem; color: var(--primary); font-weight: 600;">{{ item.candidate.headline or 'Candidate Developer' }}</div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted);">Email: {{ item.candidate.email }}</div>
+                        <h3 style="font-size: 1.15rem; color: var(--text-main); margin-bottom: 0.2rem;">{{ item.candidate.name }}</h3>
+                        <span class="mono-meta" style="color: var(--accent); display: block;">{{ item.candidate.headline or 'CANDIDATE DEVELOPER' }}</span>
+                        <div class="mono-meta" style="font-size: 0.72rem; color: var(--text-dim); margin-top: 0.2rem;">EMAIL // {{ item.candidate.email }}</div>
                         
                         <!-- Candidate Skill Tags -->
-                        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.6rem;">
+                        <div style="display: flex; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.65rem;">
                             {% for cs in item.candidate_skills %}
-                                <span style="font-size: 0.75rem; background: rgba(255, 255, 255, 0.06); border: 1px solid var(--border-glass); padding: 0.15rem 0.5rem; border-radius: var(--radius-sm); color: var(--text-sub);">
-                                    {{ cs.skill.name }} ({{ cs.proficiency }})
+                                <span style="font-family: var(--font-mono); font-size: 0.65rem; background: var(--bg-subtle); border: 1px solid var(--border); padding: 0.15rem 0.45rem; border-radius: var(--radius-xs); color: var(--text-sub);">
+                                    [{{ cs.skill.name }} // {{ cs.proficiency }}]
                                 </span>
                             {% endfor %}
                         </div>
@@ -41,30 +39,30 @@
                 </div>
 
                 <div style="display: flex; align-items: center; gap: 2rem;">
-                    <!-- AI Match Score Gauge -->
-                    <div style="text-align: center;">
-                        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Match Score</div>
-                        <span class="badge {% if item.match_score >= 70 %}badge-matched{% elif item.match_score >= 40 %}badge-partial{% else %}badge-missing{% endif %}" style="font-size: 1.1rem; font-weight: 800; padding: 0.4rem 0.9rem;">
-                            {{ item.match_score }}% Match
+                    <!-- Match Score Gauge -->
+                    <div style="text-align: right;">
+                        <span class="mono-meta" style="display: block; margin-bottom: 0.2rem;">PARITY SCORE</span>
+                        <span class="badge {% if item.match_score >= 70 %}badge-matched{% elif item.match_score >= 40 %}badge-domain{% else %}badge-missing{% endif %}" style="font-size: 0.95rem; font-weight: 700; padding: 0.35rem 0.75rem;">
+                            {{ item.match_score }}% MATCH
                         </span>
                     </div>
 
                     <!-- Update Application Status Form -->
                     <form method="POST" action="{{ url_for('employer.update_applicant_status', application_id=app.id) }}" style="display: flex; align-items: center; gap: 0.5rem;">
-                        <select name="status" class="form-select" style="padding: 0.4rem 0.8rem; font-size: 0.85rem; width: auto;">
-                            <option value="Applied" {% if app.status == 'Applied' %}selected{% endif %}>Applied</option>
-                            <option value="Shortlisted" {% if app.status == 'Shortlisted' %}selected{% endif %}>Shortlist</option>
-                            <option value="Rejected" {% if app.status == 'Rejected' %}selected{% endif %}>Reject</option>
+                        <select name="status" class="form-select" style="padding: 0.4rem 0.75rem; font-size: 0.8rem; width: auto; font-family: var(--font-mono);">
+                            <option value="Applied" {% if app.status == 'Applied' %}selected{% endif %}>Status: Applied</option>
+                            <option value="Shortlisted" {% if app.status == 'Shortlisted' %}selected{% endif %}>Status: Shortlist</option>
+                            <option value="Rejected" {% if app.status == 'Rejected' %}selected{% endif %}>Status: Reject</option>
                         </select>
-                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                        <button type="submit" class="btn btn-secondary btn-sm" style="font-size: 0.75rem;">Update</button>
                     </form>
                 </div>
             </div>
         {% endfor %}
     </div>
 {% else %}
-    <div class="glass-panel" style="padding: 3rem; text-align: center; color: var(--text-muted);">
-        No candidates have applied to this job posting yet.
+    <div class="editorial-panel" style="padding: 3.5rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+        No candidate submissions recorded for this specification yet.
     </div>
 {% endif %}
 {% endblock %}

@@ -1,131 +1,200 @@
 {% extends "base.html" %}
 
-{% block title %}SkillsBridge - Black & Silver AI Career Platform{% endblock %}
+{% block title %}SkillsBridge — Technical Competency Ledger & Syllabus Engine{% endblock %}
 
 {% block content %}
-<section style="padding: 3rem 0; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
-    <!-- Landing Hero Logo Display -->
-    <div style="margin-bottom: 0.5rem;">
-        <img src="{{ url_for('static', filename='images/skillsbridge-navbar-logo.png') }}?v=4.0" alt="SkillsBridge Platform" class="hero-logo-img" onerror="this.style.display='none';">
-    </div>
+<!-- Asymmetric Editorial Masthead -->
+<section style="padding: 2.5rem 0 4.5rem 0; border-bottom: 1px solid var(--border);">
+    <div class="grid-asymmetric">
+        <div>
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+                <span class="badge" style="color: var(--accent); border-color: var(--accent-border);">LEDGER EDITION 2026</span>
+                <span class="mono-meta">DIRECT TECHNICAL GAP DIAGNOSIS</span>
+            </div>
 
-    <div class="badge badge-domain" style="font-size: 0.9rem; padding: 0.4rem 1.2rem; background: rgba(255, 255, 255, 0.08); border-color: var(--border-silver); color: var(--silver-main);">
-        ⚡ Real-Time AI Skill Gap Diagnostic & Career Engine
-    </div>
-    
-    <h1 style="font-size: 3.2rem; font-weight: 800; max-width: 850px; line-height: 1.15; background: linear-gradient(135deg, #FFFFFF 30%, #94A3B8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-        Bridge Your Skill Gaps into High-Value Careers with <span style="color: #FFFFFF; -webkit-text-fill-color: initial;">SkillsBridge</span>
-    </h1>
+            <h1 style="margin-bottom: 1.5rem;">
+                Know the exact delta between your codebase and a <span class="serif-display">tier-one engineering</span> offer.
+            </h1>
 
-    <p style="font-size: 1.2rem; color: var(--text-muted); max-width: 680px; line-height: 1.6;">
-        SkillsBridge diagnoses your technical skill gaps against top tech job requirements, parses your resume in real time, sources targeted courses for missing skills, and connects you directly with top employers.
-    </p>
-
-    <!-- Role Selection CTAs -->
-    <div class="grid-2" style="max-width: 750px; width: 100%; margin-top: 1.5rem;">
-        <div class="glass-panel" style="padding: 2rem; text-align: left; display: flex; flex-direction: column; gap: 1rem; border-color: var(--border-silver);">
-            <div style="font-size: 2.2rem;">👨‍💻</div>
-            <h3 style="font-size: 1.4rem; color: #fff;">Job Seeker / Candidate</h3>
-            <p style="font-size: 0.9rem; color: var(--text-muted);">
-                Upload your resume for real-time AI skill extraction, calculate job match %, source courses for missing skills, and track applications.
+            <p style="font-size: 1.1rem; line-height: 1.7; max-width: 580px; margin-bottom: 2.5rem; color: var(--text-sub);">
+                SkillsBridge inventories candidate competency against live production requirements. We isolate missing frameworks, match syllabus modules to bridge gaps, and present verified readiness to hiring teams.
             </p>
-            <a href="{{ url_for('auth.signup') }}?role=candidate" class="btn btn-primary" style="margin-top: auto;">
-                Get Started as Candidate →
-            </a>
+
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="{{ url_for('auth.signup') }}?role=candidate" class="btn btn-primary">
+                    Audit Your Stack as Candidate →
+                </a>
+                <a href="{{ url_for('auth.signup') }}?role=employer" class="btn btn-secondary">
+                    Publish Specs as Employer
+                </a>
+            </div>
+
+            <!-- Key Figures -->
+            <div style="display: flex; gap: 2.5rem; margin-top: 3.5rem; padding-top: 2rem; border-top: 1px solid var(--border-subtle); flex-wrap: wrap;">
+                <div>
+                    <span class="mono-meta">FRAMEWORK INDEX</span>
+                    <div style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 600; color: var(--text-main); margin-top: 0.2rem;">35+</div>
+                </div>
+                <div>
+                    <span class="mono-meta">VERIFIED PARTNERS</span>
+                    <div style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 600; color: var(--text-main); margin-top: 0.2rem;">12 TEAMS</div>
+                </div>
+                <div>
+                    <span class="mono-meta">MATCH METHODOLOGY</span>
+                    <div style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 600; color: var(--text-main); margin-top: 0.2rem;">WEIGHTED DELTA</div>
+                </div>
+            </div>
         </div>
 
-        <div class="glass-panel" style="padding: 2rem; text-align: left; display: flex; flex-direction: column; gap: 1rem; border-color: var(--border-silver);">
-            <div style="font-size: 2.2rem;">🏢</div>
-            <h3 style="font-size: 1.4rem; color: #fff;">Employer / Recruiter</h3>
-            <p style="font-size: 0.9rem; color: var(--text-muted);">
-                Post job requirements, evaluate candidates by AI skill match scores, offer skill training courses, and streamline candidate shortlisting.
-            </p>
-            <a href="{{ url_for('auth.signup') }}?role=employer" class="btn btn-accent" style="margin-top: auto;">
-                Hire Talent as Employer →
-            </a>
+        <!-- Specimen Telemetry Card (Tangible Proof) -->
+        <div class="editorial-panel" style="padding: 2rem; background: var(--surface);">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 1rem; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem;">
+                <span class="mono-meta">LIVE AUDIT SPECIMEN // 01</span>
+                <span class="badge badge-domain">ROLE: CLOUD BACKEND</span>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <div style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 0.2rem;">CANDIDATE // TARGET PAIRING</div>
+                <strong style="font-size: 1.15rem; color: var(--text-main); display: block;">Alex Johnson → Google Cloud Platform</strong>
+                <span style="font-size: 0.82rem; color: var(--text-sub);">Requirement: Distributed Python, Docker, Redis, System Design</span>
+            </div>
+
+            <!-- Mini Telemetry Meter -->
+            <div style="background: var(--bg); border: 1px solid var(--border); padding: 1.25rem; border-radius: var(--radius-xs); margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <span style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted);">INITIAL REPOSITORY PARITY</span>
+                    <span style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: 600; color: var(--accent);">40% MATCH</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: 40%; background: var(--accent);"></div>
+                </div>
+                
+                <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.4rem; font-family: var(--font-mono); font-size: 0.72rem;">
+                    <div style="display: flex; justify-content: space-between; color: var(--status-match);">
+                        <span>[VERIFIED] PYTHON (ADVANCED)</span>
+                        <span>100% PARITY</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: var(--status-match);">
+                        <span>[VERIFIED] SQL (INTERMEDIATE)</span>
+                        <span>100% PARITY</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: var(--status-gap);">
+                        <span>[DELTA GAP] DOCKER (MISSING)</span>
+                        <span>COURSE SOURCED</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: var(--status-gap);">
+                        <span>[DELTA GAP] SYSTEM DESIGN (MISSING)</span>
+                        <span>COURSE SOURCED</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted);">
+                <span>Curriculum roadmap: 2 modules assigned</span>
+                <a href="{{ url_for('candidate.jobs') }}" style="color: var(--text-main); font-weight: 600; text-decoration: underline;">Test this role →</a>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- Featured Companies -->
-<section style="margin-top: 4rem;">
-    <h3 style="font-size: 1.1rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; text-align: center; margin-bottom: 2rem;">
-        Hiring Partners & Global Tech Leaders
-    </h3>
-    
-    <div style="display: flex; justify-content: center; align-items: center; gap: 2rem; flex-wrap: wrap;">
+<!-- Company Roster (Editorial Typography & Crisp Framing) -->
+<section style="padding: 4rem 0; border-bottom: 1px solid var(--border);">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <span class="mono-meta">HIRING ROSTER</span>
+            <h2 style="margin-top: 0.3rem;">Engineering teams hiring via verified matrices</h2>
+        </div>
+        <a href="{{ url_for('company.company_list') }}" class="mono-meta" style="color: var(--text-main); text-decoration: underline;">
+            VIEW COMPLETE DIRECTORY (12) →
+        </a>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
         {% for c in companies %}
-            <a href="{{ url_for('company.company_detail', name=c.name) }}" class="glass-panel" style="padding: 1rem 1.8rem; display: flex; align-items: center; gap: 0.8rem; text-decoration: none; color: #fff;">
-                <img src="{{ c.logo_url }}" alt="{{ c.name }}" class="company-logo">
-                <span style="font-weight: 700; font-size: 1.1rem;">{{ c.name }}</span>
+            <a href="{{ url_for('company.company_detail', name=c.name) }}" class="editorial-panel" style="padding: 1.25rem; display: flex; align-items: center; gap: 0.85rem; text-decoration: none;">
+                <img src="{{ c.logo_url }}" alt="{{ c.name }}" class="company-logo" style="width: 32px; height: 32px; min-width: 32px; padding: 3px;">
+                <div>
+                    <strong style="display: block; font-size: 0.95rem; color: var(--text-main);">{{ c.name }}</strong>
+                    <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;">{{ c.industry }}</span>
+                </div>
             </a>
         {% endfor %}
     </div>
 </section>
 
-<!-- Feature Flow Demonstration -->
-<section style="margin-top: 5rem;" class="glass-panel" style="padding: 2.5rem;">
-    <div style="text-align: center; margin-bottom: 2.5rem;">
-        <h2 style="font-size: 2rem; color: #fff; margin-bottom: 0.5rem;">How SkillsBridge Works (The Skill-to-Job Pipeline)</h2>
-        <p style="color: var(--text-muted);">Four seamless steps turning skill gaps into hired offers</p>
+<!-- Stepped Methodology Ledger (Replaces generic card duplicates) -->
+<section style="padding: 4.5rem 0; border-bottom: 1px solid var(--border);">
+    <div style="margin-bottom: 3rem; max-width: 600px;">
+        <span class="mono-meta">METHODOLOGY</span>
+        <h2 style="margin-top: 0.3rem; margin-bottom: 0.75rem;">How the verification ledger works</h2>
+        <p>A deterministic four-phase pipeline designed to replace keyword guesswork with concrete technical parity.</p>
     </div>
 
-    <div class="grid-4">
-        <div class="glass-card" style="border-left: 3px solid var(--silver-light);">
-            <div style="font-size: 1.5rem; font-weight: 800; color: var(--silver-light); margin-bottom: 0.5rem;">01.</div>
-            <h4 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.5rem;">AI Skill Profile</h4>
-            <p style="font-size: 0.85rem; color: var(--text-muted);">Upload your resume or add your technical skills in Python, SQL, React, Docker, PyTorch, etc.</p>
+    <div class="stepped-ledger">
+        <div class="ledger-row">
+            <span class="ledger-num">01 //</span>
+            <h3 class="ledger-title">Competency Inventory</h3>
+            <p class="ledger-desc">Upload project histories, paste resume summaries, or manually record language and infrastructure proficiencies. Our parser normalizes skills across 35 production taxonomy tiers.</p>
         </div>
 
-        <div class="glass-card" style="border-left: 3px solid var(--silver-main);">
-            <div style="font-size: 1.5rem; font-weight: 800; color: var(--silver-main); margin-bottom: 0.5rem;">02.</div>
-            <h4 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.5rem;">Match & Gap Engine</h4>
-            <p style="font-size: 0.85rem; color: var(--text-muted);">Select any job to view an instant AI match score, highlighting exact matched vs missing skills.</p>
+        <div class="ledger-row">
+            <span class="ledger-num">02 //</span>
+            <h3 class="ledger-title">Weighted Gap Mapping</h3>
+            <p class="ledger-desc">Select any production role. The engine compares your verified competencies against the employer’s required proficiency levels to compute a weighted parity coefficient.</p>
         </div>
 
-        <div class="glass-card" style="border-left: 3px solid var(--emerald);">
-            <div style="font-size: 1.5rem; font-weight: 800; color: var(--emerald); margin-bottom: 0.5rem;">03.</div>
-            <h4 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.5rem;">Course Sourcing</h4>
-            <p style="font-size: 0.85rem; color: var(--text-muted);">Click <strong>Source</strong> on any missing skill to immediately open curated YouTube, Coursera, or company training links.</p>
+        <div class="ledger-row">
+            <span class="ledger-num">03 //</span>
+            <h3 class="ledger-title">Targeted Course Sourcing</h3>
+            <p class="ledger-desc">Every unfulfilled skill requirement instantly generates links to verified coursework (MIT, Coursera, documentation, company-specific prep) to systematically close the gap.</p>
         </div>
 
-        <div class="glass-card" style="border-left: 3px solid var(--silver-muted);">
-            <div style="font-size: 1.5rem; font-weight: 800; color: var(--silver-muted); margin-bottom: 0.5rem;">04.</div>
-            <h4 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.5rem;">Interview & Apply</h4>
-            <p style="font-size: 0.85rem; color: var(--text-muted);">Access company-specific coding & system design guides, then click Apply to land on employer dashboards.</p>
+        <div class="ledger-row">
+            <span class="ledger-num">04 //</span>
+            <h3 class="ledger-title">Direct Verified Pipeline</h3>
+            <p class="ledger-desc">Apply directly to hiring boards. Candidates are ranked on employer dashboards by real skill match percentages rather than unvetted resume buzzwords.</p>
         </div>
     </div>
 </section>
 
-<!-- Recent Job Openings Preview -->
-<section style="margin-top: 5rem;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-        <h2 style="font-size: 1.8rem; color: #fff;">Featured Job Openings</h2>
-        <a href="{{ url_for('candidate.jobs') }}" class="btn btn-secondary btn-sm">Explore All Jobs →</a>
+<!-- Featured Roles Ledger -->
+<section style="padding: 4.5rem 0 2rem 0;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <span class="mono-meta">OPEN REQUISITIONS</span>
+            <h2 style="margin-top: 0.3rem;">Selected engineering specifications</h2>
+        </div>
+        <a href="{{ url_for('candidate.jobs') }}" class="btn btn-secondary btn-sm">Explore All Roles →</a>
     </div>
 
     <div class="grid-2">
         {% for job in recent_jobs %}
-            <div class="glass-panel job-card">
+            <div class="job-card">
                 <div>
                     <div class="job-header">
                         <img src="{{ job.company.logo_url }}" alt="{{ job.company.name }}" class="company-logo">
-                        <div>
+                        <div style="flex: 1;">
+                            <span class="mono-meta" style="color: var(--accent); margin-bottom: 0.2rem; display: block;">{{ job.company.name }}</span>
                             <h3 class="job-title"><a href="{{ url_for('candidate.job_detail', job_id=job.id) }}">{{ job.title }}</a></h3>
-                            <div style="font-size: 0.9rem; color: var(--text-sub);">{{ job.company.name }} • <span class="badge badge-domain">{{ job.domain }}</span></div>
                         </div>
                     </div>
-                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 1rem; line-height: 1.5;">
+
+                    <p style="font-size: 0.88rem; color: var(--text-muted); margin: 1rem 0; line-height: 1.55;">
                         {{ job.description[:140] }}...
                     </p>
+
+                    <div class="job-meta">
+                        <span>LOC: {{ job.location }}</span>
+                        <span>COMP: {{ job.salary_range }}</span>
+                        <span>EXP: {{ job.experience_required }}</span>
+                    </div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-glass); padding-top: 1rem;">
-                    <div class="job-meta">
-                        <span>📍 {{ job.location }}</span>
-                        <span>💰 {{ job.salary_range }}</span>
-                    </div>
-                    <a href="{{ url_for('candidate.job_detail', job_id=job.id) }}" class="btn btn-primary btn-sm">View & Match</a>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 1rem; margin-top: 0.5rem;">
+                    <span class="badge badge-domain">{{ job.domain }}</span>
+                    <a href="{{ url_for('candidate.job_detail', job_id=job.id) }}" class="btn btn-primary btn-sm">
+                        View Specification →
+                    </a>
                 </div>
             </div>
         {% endfor %}

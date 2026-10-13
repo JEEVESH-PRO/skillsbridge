@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}{{ job.company.name }} Interview Prep Kit - SkillsBridge{% endblock %}
+{% block title %}{{ job.company.name }} Interview Specification — SkillsBridge{% endblock %}
 
 {% block content %}
-<div style="margin-bottom: 2rem;">
-    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-        <img src="{{ job.company.logo_url }}" alt="{{ job.company.name }}" style="width: 42px; height: 42px; object-fit: contain;">
+<div style="margin-bottom: 2.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem;">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+        <img src="{{ job.company.logo_url }}" alt="{{ job.company.name }}" class="company-logo" style="width: 44px; height: 44px; min-width: 44px; padding: 4px;">
         <div>
-            <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff;">{{ job.company.name }} Interview Prep Kit</h1>
-            <p style="color: var(--text-muted);">Curated preparation guides and technical round expectations for {{ job.title }}</p>
+            <span class="mono-meta" style="color: var(--accent); margin-bottom: 0.2rem; display: block;">TECHNICAL ROUND PREPARATION</span>
+            <h1 style="font-size: 2rem; margin-bottom: 0.2rem;">{{ job.company.name }} Evaluation Blueprint</h1>
+            <p style="font-size: 0.9rem;">Evaluation structure and round requirements for {{ job.title }}</p>
         </div>
     </div>
 </div>
@@ -16,57 +17,66 @@
 <div class="grid-2">
     <!-- Prep Resources List -->
     <div style="display: flex; flex-direction: column; gap: 1.25rem;">
-        <h3 style="font-size: 1.3rem; color: #fff;">🎯 Company Specific Guides</h3>
+        <div style="border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
+            <span class="mono-meta">COMPANY-SPECIFIC SYLLABUS GUIDES</span>
+        </div>
         
         {% if resources %}
             {% for r in resources %}
-                <div class="glass-panel" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <span class="badge badge-domain" style="font-size: 0.8rem;">{{ r.resource_type }}</span>
-                        <a href="{{ r.url }}" target="_blank" class="btn btn-secondary btn-sm">Open Guide ↗</a>
+                <div class="editorial-panel" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                        <span class="badge badge-domain">{{ r.resource_type }}</span>
+                        <a href="{{ r.url }}" target="_blank" class="mono-meta" style="color: var(--text-main); text-decoration: underline;">
+                            EXTERNAL DOCUMENT ↗
+                        </a>
                     </div>
-                    <h4 style="font-size: 1.15rem; color: #fff;">{{ r.title }}</h4>
-                    <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">{{ r.description }}</p>
+                    <h4 style="font-size: 1.1rem; color: var(--text-main); margin-top: 0.3rem;">{{ r.title }}</h4>
+                    <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.55;">{{ r.description }}</p>
                 </div>
             {% endfor %}
         {% else %}
-            <div class="glass-panel" style="padding: 2rem; text-align: center; color: var(--text-muted);">
-                No explicit prep resources uploaded yet for {{ job.company.name }}. Check default computer science guides below!
+            <div class="editorial-panel" style="padding: 2.5rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+                No custom company documents uploaded yet for {{ job.company.name }}. Refer to universal technical specifications on the right.
             </div>
         {% endif %}
     </div>
 
     <!-- General Technical Interview Blueprint -->
     <div style="display: flex; flex-direction: column; gap: 1.25rem;">
-        <h3 style="font-size: 1.3rem; color: #fff;">💡 Technical Interview Blueprint</h3>
+        <div style="border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
+            <span class="mono-meta">STANDARD ENGINEERING ROUNDS</span>
+        </div>
         
-        <div class="glass-panel" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
-            <div style="display: flex; align-items: center; gap: 0.8rem; color: var(--emerald);">
-                <div style="font-size: 1.5rem;">01</div>
-                <strong style="font-size: 1.1rem; color: #fff;">Coding & Algorithmic Round</strong>
+        <div class="editorial-panel" style="padding: 1.5rem; border-left: 3px solid var(--accent);">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+                <span class="mono-meta" style="color: var(--accent);">ROUND 01 // TIME: 45 MIN</span>
+                <span class="mono-meta">ALGORITHMIC PARITY</span>
             </div>
-            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">
-                Expect 2 coding problems in 45 minutes. Focus on Data Structures, Time Complexity analysis (Big-O), edge cases, and speaking aloud as you program.
+            <h4 style="font-size: 1.05rem; color: var(--text-main); margin-bottom: 0.4rem;">Algorithmic & Data Structures Session</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.55;">
+                Two coding exercises. Scored on Big-O space/time optimization, handling edge conditions, and structured technical narration while programming.
             </p>
         </div>
 
-        <div class="glass-panel" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
-            <div style="display: flex; align-items: center; gap: 0.8rem; color: var(--cyan-accent);">
-                <div style="font-size: 1.5rem;">02</div>
-                <strong style="font-size: 1.1rem; color: #fff;">System Architecture Round</strong>
+        <div class="editorial-panel" style="padding: 1.5rem; border-left: 3px solid var(--border-strong);">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+                <span class="mono-meta" style="color: var(--text-sub);">ROUND 02 // TIME: 60 MIN</span>
+                <span class="mono-meta">SYSTEM ARCHITECTURE</span>
             </div>
-            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">
-                Architect scalable microservices, database schemas, caching strategy (Redis), load balancing, and message queues (Kafka/RabbitMQ).
+            <h4 style="font-size: 1.05rem; color: var(--text-main); margin-bottom: 0.4rem;">Distributed Systems & Infrastructure</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.55;">
+                Designing scalable microservice pipelines, schema partitioning, caching hierarchy, and asynchronous message queues with clear fault boundaries.
             </p>
         </div>
 
-        <div class="glass-panel" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
-            <div style="display: flex; align-items: center; gap: 0.8rem; color: var(--primary);">
-                <div style="font-size: 1.5rem;">03</div>
-                <strong style="font-size: 1.1rem; color: #fff;">Behavioral STAR Framework</strong>
+        <div class="editorial-panel" style="padding: 1.5rem; border-left: 3px solid var(--border-strong);">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem;">
+                <span class="mono-meta" style="color: var(--text-sub);">ROUND 03 // TIME: 45 MIN</span>
+                <span class="mono-meta">OWNERSHIP & VALUES</span>
             </div>
-            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">
-                Prepare Situation, Task, Action, Result stories emphasizing leadership, conflict resolution, technical ownership, and learning from failure.
+            <h4 style="font-size: 1.05rem; color: var(--text-main); margin-bottom: 0.4rem;">Engineering Ownership & STAR Review</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.55;">
+                Incident management, architecture trade-offs under deadlines, and conflict resolution demonstrated through concrete technical examples.
             </p>
         </div>
     </div>

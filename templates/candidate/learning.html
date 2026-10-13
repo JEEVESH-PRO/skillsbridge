@@ -1,47 +1,48 @@
 {% extends "base.html" %}
 
-{% block title %}Upskilling & Learning Hub - SkillsBridge{% endblock %}
+{% block title %}Curriculum Atlas & Technical Modules — SkillsBridge{% endblock %}
 
 {% block content %}
-<div style="margin-bottom: 2rem;">
-    <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff;">Upskilling & Learning Hub</h1>
-    <p style="color: var(--text-muted);">Curated learning paths across missing job skills and company-sponsored courses</p>
+<div style="margin-bottom: 2.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem;">
+    <span class="mono-meta" style="color: var(--accent); margin-bottom: 0.35rem; display: block;">CURRICULUM ATLAS // TARGETED ROADMAPS</span>
+    <h1>Technical Coursework & Syllabus Modules</h1>
+    <p>Targeted learning paths mapped directly to unfulfilled requisition dependencies.</p>
 </div>
 
 <!-- Course Provider Filter Pills -->
 <div class="filter-pills">
-    <button class="pill active">All Courses</button>
-    <button class="pill">🎥 YouTube Tech</button>
-    <button class="pill">🎓 Coursera & Platforms</button>
-    <button class="pill">🏢 Company Sponsored</button>
+    <button class="pill active" type="button">ALL MODULES</button>
+    <button class="pill" type="button">PLATFORM / COURSERA</button>
+    <button class="pill" type="button">ENGINEERING DOCUMENTATION</button>
+    <button class="pill" type="button">COMPANY OFFICIAL</button>
 </div>
 
 <div class="grid-3">
     {% for crs in courses %}
-        <div class="glass-panel" style="padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1rem;">
+        <div class="editorial-panel" style="padding: 1.75rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1.25rem;">
             <div>
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.8rem;">
-                    <span class="badge badge-domain" style="font-size: 0.75rem;">{{ crs.skill.name }}</span>
-                    {% if crs.source_type == 'youtube' %}
-                        <span class="badge badge-missing" style="font-size: 0.75rem;">YouTube</span>
-                    {% elif crs.source_type == 'company' %}
-                        <span class="badge badge-matched" style="font-size: 0.75rem;">Company Official</span>
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.85rem;">
+                    <span class="badge badge-domain">[{{ crs.skill.name }}]</span>
+                    {% if crs.source_type == 'company' %}
+                        <span class="badge badge-matched">COMPANY SPONSORED</span>
+                    {% elif crs.source_type == 'youtube' %}
+                        <span class="mono-meta" style="font-size: 0.65rem;">VIDEO LECTURE</span>
                     {% else %}
-                        <span class="badge badge-partial" style="font-size: 0.75rem;">Platform</span>
+                        <span class="mono-meta" style="font-size: 0.65rem;">PLATFORM SPEC</span>
                     {% endif %}
                 </div>
 
-                <h3 style="font-size: 1.15rem; color: #fff; line-height: 1.4; margin-bottom: 0.5rem;">{{ crs.title }}</h3>
-                <div style="font-size: 0.85rem; color: var(--text-sub);">Provider: <strong>{{ crs.provider }}</strong></div>
+                <h3 style="font-size: 1.15rem; color: var(--text-main); line-height: 1.35; margin-bottom: 0.4rem;">{{ crs.title }}</h3>
+                <span class="mono-meta" style="font-size: 0.72rem; color: var(--text-dim);">SOURCE // {{ crs.provider }}</span>
             </div>
 
-            <div>
-                <div style="display: flex; gap: 1rem; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
-                    <span>⏱️ {{ crs.duration }}</span>
-                    <span>📈 {{ crs.difficulty }}</span>
+            <div style="border-top: 1px solid var(--border); padding-top: 1rem;">
+                <div style="display: flex; gap: 1.25rem; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 1rem;">
+                    <span>DURATION: {{ crs.duration }}</span>
+                    <span>DEPTH: {{ crs.difficulty }}</span>
                 </div>
-                <a href="{{ crs.url }}" target="_blank" class="btn btn-primary btn-sm" style="width: 100%;">
-                    Start Course ↗
+                <a href="{{ crs.url }}" target="_blank" class="btn btn-secondary btn-sm" style="width: 100%;">
+                    Open Module ↗
                 </a>
             </div>
         </div>

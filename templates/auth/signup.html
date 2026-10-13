@@ -1,70 +1,71 @@
 {% extends "base.html" %}
 
-{% block title %}Create Account - SkillsBridge{% endblock %}
+{% block title %}Create Account — SkillsBridge Competency Ledger{% endblock %}
 
 {% block content %}
-<div style="max-width: 520px; margin: 2rem auto 0 auto;" class="glass-panel">
-    <div style="padding: 2rem;">
-        <h2 style="font-size: 1.8rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; text-align: center;">Join SkillsBridge</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; margin-bottom: 1.5rem;">
-            Choose your account role to begin
+<div style="max-width: 480px; margin: 2.5rem auto 0 auto;" class="editorial-panel">
+    <div style="padding: 2.25rem;">
+        <span class="mono-meta" style="color: var(--accent); display: block; margin-bottom: 0.35rem; text-align: center;">REGISTRATION // NEW PROFILE</span>
+        <h2 style="font-size: 1.6rem; color: var(--text-main); margin-bottom: 0.35rem; text-align: center;">Join the Ledger</h2>
+        <p style="color: var(--text-muted); font-size: 0.88rem; text-align: center; margin-bottom: 1.75rem;">
+            Select account jurisdiction to initialize your profile.
         </p>
 
         <form method="POST" action="{{ url_for('auth.signup') }}">
             <!-- Role Picker Toggle -->
             <div class="form-group">
-                <label class="form-label">Account Role</label>
-                <div style="display: flex; gap: 1rem;">
-                    <label class="glass-panel" style="flex: 1; padding: 0.9rem; cursor: pointer; text-align: center; display: block;" id="roleCandidateLabel">
-                        <input type="radio" name="role" value="candidate" id="roleCandidate" checked onchange="toggleRoleFields()" style="margin-right: 0.4rem;">
-                        <strong style="color: #fff;">Candidate</strong>
-                        <div style="font-size: 0.75rem; color: var(--text-muted);">Job Seeker</div>
+                <label class="form-label">Account Jurisdiction</label>
+                <div style="display: flex; gap: 0.75rem;">
+                    <label class="editorial-panel" style="flex: 1; padding: 0.85rem; cursor: pointer; text-align: center; display: block; background: var(--bg);" id="roleCandidateLabel">
+                        <input type="radio" name="role" value="candidate" id="roleCandidate" checked onchange="toggleRoleFields()" style="margin-right: 0.35rem;">
+                        <strong style="color: var(--text-main); font-size: 0.9rem;">Candidate</strong>
+                        <div class="mono-meta" style="font-size: 0.65rem; color: var(--text-dim); margin-top: 0.15rem;">ENGINEER</div>
                     </label>
-                    <label class="glass-panel" style="flex: 1; padding: 0.9rem; cursor: pointer; text-align: center; display: block;" id="roleEmployerLabel">
-                        <input type="radio" name="role" value="employer" id="roleEmployer" onchange="toggleRoleFields()" style="margin-right: 0.4rem;">
-                        <strong style="color: #fff;">Employer</strong>
-                        <div style="font-size: 0.75rem; color: var(--text-muted);">Recruiter / Hiring Manager</div>
+                    <label class="editorial-panel" style="flex: 1; padding: 0.85rem; cursor: pointer; text-align: center; display: block; background: var(--bg);" id="roleEmployerLabel">
+                        <input type="radio" name="role" value="employer" id="roleEmployer" onchange="toggleRoleFields()" style="margin-right: 0.35rem;">
+                        <strong style="color: var(--text-main); font-size: 0.9rem;">Employer</strong>
+                        <div class="mono-meta" style="font-size: 0.65rem; color: var(--text-dim); margin-top: 0.15rem;">HIRING TEAM</div>
                     </label>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="name">Full Name</label>
+                <label class="form-label" for="name">Legal Name / Full Name</label>
                 <input type="text" id="name" name="name" class="form-input" placeholder="e.g. Alex Johnson" required>
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="email">Email Address</label>
-                <input type="email" id="email" name="email" class="form-input" placeholder="alex@example.com" required>
+                <label class="form-label" for="email">Account Email</label>
+                <input type="email" id="email" name="email" class="form-input" placeholder="alex@domain.com" required>
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="password">Password</label>
+                <label class="form-label" for="password">Account Password</label>
                 <input type="password" id="password" name="password" class="form-input" placeholder="••••••••" required>
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="headline">Professional Headline</label>
-                <input type="text" id="headline" name="headline" class="form-input" placeholder="e.g. Software Developer / Senior Recruiter">
+                <label class="form-label" for="headline">Professional Title / Discipline</label>
+                <input type="text" id="headline" name="headline" class="form-input" placeholder="e.g. Systems Engineer / Technical Recruiter">
             </div>
 
             <!-- Employer Only Company Selector -->
             <div class="form-group" id="companySelectGroup" style="display: none;">
-                <label class="form-label" for="company_id">Associated Company</label>
+                <label class="form-label" for="company_id">Associated Organization</label>
                 <select name="company_id" id="company_id" class="form-select">
                     {% for comp in companies %}
-                        <option value="{{ comp.id }}">{{ comp.name }} ({{ comp.industry }})</option>
+                        <option value="{{ comp.id }}">{{ comp.name }} [{{ comp.industry }}]</option>
                     {% endfor %}
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.8rem;">
-                Create Account →
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.75rem;">
+                Initialize Profile & Register →
             </button>
         </form>
 
-        <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">
-            Already registered? <a href="{{ url_for('auth.login') }}" style="color: var(--primary); font-weight: 600;">Sign In Here</a>
+        <div style="text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-muted);">
+            Existing registration? <a href="{{ url_for('auth.login') }}" style="color: var(--text-main); text-decoration: underline; font-weight: 600;">Sign In</a>
         </div>
     </div>
 </div>
@@ -75,7 +76,6 @@
         const compGroup = document.getElementById('companySelectGroup');
         compGroup.style.display = isEmployer ? 'block' : 'none';
     }
-    // Set role from query parameter if present
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('role') === 'employer') {
         document.getElementById('roleEmployer').checked = true;

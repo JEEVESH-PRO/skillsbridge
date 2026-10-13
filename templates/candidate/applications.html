@@ -1,52 +1,51 @@
 {% extends "base.html" %}
 
-{% block title %}My Job Applications - SkillsBridge{% endblock %}
+{% block title %}Application Ledger — SkillsBridge{% endblock %}
 
 {% block content %}
-<div style="margin-bottom: 2rem;">
-    <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff;">Application Tracker</h1>
-    <p style="color: var(--text-muted);">Track your active job applications and company status</p>
+<div style="margin-bottom: 2.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem;">
+    <span class="mono-meta" style="color: var(--accent); margin-bottom: 0.35rem; display: block;">SUBMISSION TRACKING // TELEMETRY VERIFIED</span>
+    <h1>Candidate Applications</h1>
+    <p>Status tracking for verified submissions sent to partner hiring boards.</p>
 </div>
 
 {% if applications %}
-    <div style="display: flex; flex-direction: column; gap: 1rem;">
+    <div style="display: flex; flex-direction: column; gap: 0.85rem;">
         {% for app in applications %}
-            <div class="glass-panel" style="padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                <div style="display: flex; align-items: center; gap: 1.25rem;">
-                    <img src="{{ app.job.company.logo_url }}" alt="{{ app.job.company.name }}" class="company-logo">
+            <div class="editorial-panel" style="padding: 1.5rem 1.75rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.25rem;">
+                <div style="display: flex; align-items: flex-start; gap: 1.25rem;">
+                    <img src="{{ app.job.company.logo_url }}" alt="{{ app.job.company.name }}" class="company-logo" style="width: 42px; height: 42px; min-width: 42px; padding: 4px;">
                     <div>
-                        <h3 style="font-size: 1.2rem; color: #fff; margin-bottom: 0.2rem;">
+                        <span class="mono-meta" style="color: var(--text-dim); display: block;">{{ app.job.company.name }} • {{ app.job.location }}</span>
+                        <h3 style="font-size: 1.15rem; color: var(--text-main); margin-top: 0.15rem;">
                             <a href="{{ url_for('candidate.job_detail', job_id=app.job.id) }}">{{ app.job.title }}</a>
                         </h3>
-                        <div style="font-size: 0.9rem; color: var(--text-sub);">
-                            {{ app.job.company.name }} • {{ app.job.location }}
-                        </div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.4rem;">
-                            Applied on {{ app.applied_at.strftime('%b %d, %Y') }}
+                        <div class="mono-meta" style="margin-top: 0.35rem;">
+                            SUBMITTED // {{ app.applied_at.strftime('%Y-%m-%d') if app.applied_at else 'RECENT' }}
                         </div>
                     </div>
                 </div>
 
-                <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <div style="display: flex; align-items: center; gap: 2rem;">
                     <div style="text-align: right;">
-                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.2rem;">Match Score at Application</div>
-                        <span class="badge badge-domain" style="font-size: 1rem; padding: 0.3rem 0.8rem;">
-                            {{ app.match_score }}% Match
+                        <span class="mono-meta" style="display: block; margin-bottom: 0.2rem;">RECORDED PARITY</span>
+                        <span class="badge badge-domain" style="font-size: 0.85rem; padding: 0.25rem 0.6rem;">
+                            {{ app.match_score }}% MATCH
                         </span>
                     </div>
 
                     <div>
                         {% if app.status == 'Shortlisted' %}
-                            <span class="badge badge-matched" style="font-size: 0.95rem; padding: 0.5rem 1rem;">
-                                🎉 Shortlisted
+                            <span class="badge badge-matched" style="padding: 0.4rem 0.8rem;">
+                                STATUS // SHORTLISTED
                             </span>
                         {% elif app.status == 'Rejected' %}
-                            <span class="badge badge-missing" style="font-size: 0.95rem; padding: 0.5rem 1rem;">
-                                Rejected
+                            <span class="badge badge-missing" style="padding: 0.4rem 0.8rem;">
+                                STATUS // ARCHIVED
                             </span>
                         {% else %}
-                            <span class="badge badge-partial" style="font-size: 0.95rem; padding: 0.5rem 1rem;">
-                                ⏳ Under Review
+                            <span class="badge" style="padding: 0.4rem 0.8rem; color: var(--text-sub);">
+                                STATUS // UNDER REVIEW
                             </span>
                         {% endif %}
                     </div>
@@ -55,11 +54,13 @@
         {% endfor %}
     </div>
 {% else %}
-    <div class="glass-panel" style="padding: 3rem; text-align: center;">
-        <div style="font-size: 3rem; margin-bottom: 1rem;">💼</div>
-        <h3 style="font-size: 1.4rem; color: #fff; margin-bottom: 0.5rem;">No Applications Submitted Yet</h3>
-        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Browse job openings, check your skill match score, and submit your application!</p>
-        <a href="{{ url_for('candidate.jobs') }}" class="btn btn-primary">Browse Jobs Now →</a>
+    <div class="editorial-panel" style="padding: 3.5rem; text-align: center;">
+        <span class="mono-meta" style="color: var(--text-dim); display: block; margin-bottom: 0.5rem;">LEDGER EMPTY</span>
+        <h3 style="font-size: 1.25rem; color: var(--text-main); margin-bottom: 0.5rem;">No Applications Recorded</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1.75rem; max-width: 480px; margin-left: auto; margin-right: auto;">
+            Explore open engineering specifications, audit your competency parity, and submit directly to engineering teams.
+        </p>
+        <a href="{{ url_for('candidate.jobs') }}" class="btn btn-primary">Browse Requisitions →</a>
     </div>
 {% endif %}
 {% endblock %}

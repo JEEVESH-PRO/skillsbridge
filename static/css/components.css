@@ -1,130 +1,140 @@
-/* Component Specific Styles for SkillsBridge */
+/* ==========================================================================
+   SKILLSBRIDGE — COMPONENT SPECIFICATIONS
+   Architectural grids, tabular ledgers, diagnostic gauges, and forms.
+   ========================================================================== */
 
-/* Grid Layouts */
+/* Grid Systems with Purposeful Rhythm */
 .grid-2 {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.5rem;
 }
 
 .grid-3 {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.5rem;
 }
 
 .grid-4 {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1.25rem;
 }
 
-@media (max-width: 1024px) {
+.grid-asymmetric {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 2.5rem;
+    align-items: start;
+}
+
+@media (max-width: 960px) {
+    .grid-asymmetric {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
     .grid-3, .grid-4 {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 680px) {
     .grid-2, .grid-3, .grid-4 {
         grid-template-columns: 1fr;
     }
 }
 
-/* Match Score Gauge (Radial & Bar) */
+/* Match Score Gauge (Radial & Telemetry Card) */
 .match-score-card {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    padding: 1.5rem;
-    background: linear-gradient(135deg, rgba(17, 24, 39, 0.9), rgba(30, 41, 59, 0.8));
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-glass);
+    gap: 2rem;
+    padding: 1.75rem 2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
 }
 
 .radial-gauge {
     position: relative;
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .radial-gauge svg {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     transform: rotate(-90deg);
 }
 
 .radial-gauge circle {
     fill: none;
-    stroke-width: 8;
-    stroke-linecap: round;
+    stroke-width: 6;
+    stroke-linecap: square;
 }
 
 .radial-bg {
-    stroke: rgba(255, 255, 255, 0.1);
+    stroke: var(--border);
 }
 
 .radial-fill {
-    stroke: var(--primary);
+    stroke: var(--text-main);
     stroke-dasharray: 251.2;
     stroke-dashoffset: 251.2;
-    transition: stroke-dashoffset 1s ease-out;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .radial-text {
     position: absolute;
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-main);
+    letter-spacing: -0.05em;
 }
 
-.score-high { stroke: var(--emerald); color: var(--emerald); }
-.score-med { stroke: var(--amber); color: var(--amber); }
-.score-low { stroke: var(--rose); color: var(--rose); }
+.score-high { stroke: var(--status-match) !important; color: var(--status-match) !important; }
+.score-med { stroke: var(--status-warn) !important; color: var(--status-warn) !important; }
+.score-low { stroke: var(--status-gap) !important; color: var(--status-gap) !important; }
 
-/* Progress Bar */
+/* Progress Bar (Technical Meter) */
 .progress-bar-container {
     width: 100%;
-    height: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-full);
+    height: 4px;
+    background: var(--border);
+    border-radius: 0;
     overflow: hidden;
     margin: 0.5rem 0;
 }
 
 .progress-bar-fill {
     height: 100%;
-    border-radius: var(--radius-full);
-    background: var(--gradient-primary);
-    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--accent);
+    transition: width 0.6s ease;
 }
 
-/* Job Cards */
+/* Job Cards — Crisp Architectural Box */
 .job-card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 1.5rem;
+    padding: 1.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
     gap: 1.25rem;
-    transition: all 0.3s ease;
+    transition: border-color 150ms ease, background 150ms ease;
 }
 
 .job-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--border-accent);
-    box-shadow: var(--shadow-glow);
-}
-
-.company-logo {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-sm);
-    object-fit: contain;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 6px;
+    border-color: var(--border-strong);
+    background: var(--surface-hover);
 }
 
 .job-header {
@@ -133,43 +143,63 @@
     align-items: flex-start;
 }
 
+.company-logo {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: var(--radius-xs);
+    object-fit: contain;
+    background: #FFFFFF;
+    padding: 4px;
+    border: 1px solid var(--border-subtle);
+}
+
 .job-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 0.3rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
+}
+
+.job-title a:hover {
+    color: var(--accent);
 }
 
 .job-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    font-size: 0.85rem;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
     color: var(--text-muted);
 }
 
 .job-meta span {
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
+    padding: 0.15rem 0.45rem;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xs);
 }
 
-/* Modals */
+/* Modals — Minimalist Dialogue */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(10px);
+    background: rgba(12, 14, 18, 0.88);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 2000;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s ease;
+    transition: opacity 180ms ease, visibility 180ms ease;
+    padding: 1.5rem;
 }
 
 .modal-overlay.active {
@@ -178,15 +208,15 @@
 }
 
 .modal-container {
-    width: 90%;
-    max-width: 650px;
-    background: var(--bg-dark);
-    border: 1px solid var(--border-accent);
-    border-radius: var(--radius-lg);
-    padding: 2rem;
-    box-shadow: var(--shadow-glow);
-    transform: scale(0.9);
-    transition: transform 0.3s ease;
+    width: 100%;
+    max-width: 640px;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 2.25rem;
+    box-shadow: var(--shadow-dropdown);
+    transform: scale(0.98);
+    transition: transform 180ms ease;
 }
 
 .modal-overlay.active .modal-container {
@@ -198,82 +228,135 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border-glass);
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid var(--border);
 }
 
 .modal-title {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-main);
 }
 
 .close-btn {
     background: none;
     border: none;
     color: var(--text-muted);
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     cursor: pointer;
-    transition: color 0.2s;
+    line-height: 1;
+    transition: color 120ms ease;
 }
 
 .close-btn:hover {
-    color: #fff;
+    color: var(--text-main);
 }
 
-/* Forms & Inputs */
+/* Forms & Clean Input Fields */
 .form-group {
     margin-bottom: 1.25rem;
 }
 
 .form-label {
     display: block;
-    font-size: 0.9rem;
+    font-size: 0.82rem;
     font-weight: 600;
     color: var(--text-sub);
     margin-bottom: 0.4rem;
+    font-family: var(--font-sans);
 }
 
 .form-input, .form-select, .form-textarea {
     width: 100%;
-    padding: 0.75rem 1rem;
-    background: rgba(17, 24, 39, 0.8);
-    border: 1px solid var(--border-glass);
-    border-radius: var(--radius-sm);
-    color: #fff;
-    font-size: 0.95rem;
+    padding: 0.65rem 0.85rem;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-xs);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
     outline: none;
-    transition: border-color 0.2s ease;
+    transition: border-color 150ms ease, background 150ms ease;
 }
 
 .form-input:focus, .form-select:focus, .form-textarea:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    border-color: var(--text-main);
+    background: var(--surface);
 }
 
-/* Filter Tags */
+.form-textarea {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+/* Editorial Stepped Ledger (Replaces generic "How it works" cards) */
+.stepped-ledger {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--border);
+}
+
+.ledger-row {
+    display: grid;
+    grid-template-columns: 80px 240px 1fr;
+    gap: 2rem;
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--border);
+    align-items: baseline;
+    transition: background 120ms ease;
+}
+
+.ledger-num {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.ledger-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.ledger-desc {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .ledger-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        padding: 1.25rem 0;
+    }
+}
+
+/* Filter Tag Pills */
 .filter-pills {
     display: flex;
-    gap: 0.6rem;
+    gap: 0.5rem;
     flex-wrap: wrap;
     margin-bottom: 1.5rem;
 }
 
 .pill {
-    padding: 0.45rem 1.1rem;
-    border-radius: var(--radius-full);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--border-glass);
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-xs);
+    background: var(--surface);
+    border: 1px solid var(--border);
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 120ms ease;
 }
 
 .pill:hover, .pill.active {
-    background: var(--gradient-primary);
-    color: #fff;
-    border-color: transparent;
-    box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+    background: var(--text-main);
+    color: var(--bg);
+    border-color: var(--text-main);
 }

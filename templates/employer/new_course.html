@@ -1,53 +1,54 @@
 {% extends "base.html" %}
 
-{% block title %}Offer New Course - SkillsBridge{% endblock %}
+{% block title %}Publish Syllabus Module — SkillsBridge{% endblock %}
 
 {% block content %}
-<div style="max-width: 600px; margin: 2rem auto 0 auto;" class="glass-panel">
-    <div style="padding: 2rem;">
-        <h2 style="font-size: 1.8rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem;">Offer Company Upskilling Course</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
-            Provide official training resources to candidates missing key technical skills
+<div style="max-width: 580px; margin: 2rem auto 0 auto;" class="editorial-panel">
+    <div style="padding: 2.25rem;">
+        <span class="mono-meta" style="color: var(--accent); margin-bottom: 0.35rem; display: block;">CURRICULUM AUTHORING</span>
+        <h2 style="font-size: 1.6rem; color: var(--text-main); margin-bottom: 0.35rem;">Publish Company Training Module</h2>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.75rem;">
+            Provide official coursework to bridge common applicant gap areas.
         </p>
 
         <form method="POST" action="{{ url_for('employer.new_course') }}">
             <div class="form-group">
-                <label class="form-label" for="skill_id">Target Missing Skill</label>
+                <label class="form-label" for="skill_id">Target Deficiency Skill</label>
                 <select name="skill_id" id="skill_id" class="form-select" required>
                     {% for s in skills %}
-                        <option value="{{ s.id }}">{{ s.name }} ({{ s.category }})</option>
+                        <option value="{{ s.id }}">{{ s.name }} [{{ s.category }}]</option>
                     {% endfor %}
                 </select>
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="title">Course Title</label>
-                <input type="text" id="title" name="title" class="form-input" placeholder="e.g. Google Cloud Containerization Bootcamp" required>
+                <label class="form-label" for="title">Module Specification Title</label>
+                <input type="text" id="title" name="title" class="form-input" placeholder="e.g. Distributed Infrastructure & Containerization Lab" required>
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="url">Resource URL</label>
-                <input type="url" id="url" name="url" class="form-input" placeholder="https://..." required>
+                <label class="form-label" for="url">Curriculum Resource URL</label>
+                <input type="url" id="url" name="url" class="form-input" placeholder="https://cloud.google.com/training/..." required>
             </div>
 
             <div class="grid-2">
                 <div class="form-group">
-                    <label class="form-label" for="duration">Duration</label>
-                    <input type="text" id="duration" name="duration" class="form-input" placeholder="e.g. 3 Weeks / 8 Hours">
+                    <label class="form-label" for="duration">Pacing / Duration</label>
+                    <input type="text" id="duration" name="duration" class="form-input" placeholder="e.g. 3 Weeks (Self-paced)">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="difficulty">Difficulty</label>
+                    <label class="form-label" for="difficulty">Target Depth Tier</label>
                     <select name="difficulty" id="difficulty" class="form-select">
-                        <option value="Beginner">Beginner</option>
-                        <option value="Intermediate" selected>Intermediate</option>
-                        <option value="Advanced">Advanced</option>
+                        <option value="Beginner">Beginner (Fundamentals)</option>
+                        <option value="Intermediate" selected>Intermediate (Production)</option>
+                        <option value="Advanced">Advanced (Systems internals)</option>
                     </select>
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-accent" style="width: 100%; margin-top: 1rem; padding: 0.8rem;">
-                Publish Course for Candidates →
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.8rem;">
+                Publish Syllabus Module →
             </button>
         </form>
     </div>
