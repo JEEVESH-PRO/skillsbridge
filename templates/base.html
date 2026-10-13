@@ -36,9 +36,10 @@
     </div>
 
     <!-- Editorial Header / Navigation -->
-    <nav class="navbar">
-        <a href="{{ url_for('landing') }}" class="nav-brand">
-            <span class="brand-symbol">SB</span>
+    <nav class="navbar nav-glass">
+        <a href="{{ url_for('landing') }}" class="nav-brand nav-brand--glass">
+            <img src="{{ url_for('static', filename='images/skillsbridge-navbar-logo.png') }}" alt="SkillsBridge" class="brand-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <div class="brand-symbol" style="display:none">SB</div>
             <div class="brand-text-block">
                 <span class="brand-title">SkillsBridge</span>
                 <span class="brand-edition">COMPETENCY ATLAS // 2026</span>
@@ -53,13 +54,13 @@
         {% if session.get('user_id') %}
             <!-- Authenticated Ledger Navigation -->
             <ul class="nav-links" id="navLinksMenu">
-                <li><a href="{{ url_for('candidate.jobs') }}" class="nav-link">Job Catalog</a></li>
-                <li><a href="{{ url_for('company.company_list') }}" class="nav-link">Companies</a></li>
+                <li><a href="{{ url_for('candidate.jobs') }}" class="nav-link nav-link--glow">Job Catalog</a></li>
+                <li><a href="{{ url_for('company.company_list') }}" class="nav-link nav-link--glow">Companies</a></li>
                 
                 {% if session.get('user_role') == 'candidate' %}
-                    <li><a href="{{ url_for('candidate.profile') }}" class="nav-link">Skills Matrix</a></li>
-                    <li><a href="{{ url_for('candidate.applications') }}" class="nav-link">Applications</a></li>
-                    <li><a href="{{ url_for('candidate.learning') }}" class="nav-link">Syllabus Hub</a></li>
+                    <li><a href="{{ url_for('candidate.profile') }}" class="nav-link nav-link--glow">Skills Matrix</a></li>
+                    <li><a href="{{ url_for('candidate.applications') }}" class="nav-link nav-link--glow">Applications</a></li>
+                    <li><a href="{{ url_for('candidate.learning') }}" class="nav-link nav-link--glow">Syllabus Hub</a></li>
                 {% else %}
                     <li><a href="{{ url_for('employer.dashboard') }}" class="nav-link">Employer Ledger</a></li>
                     <li><a href="{{ url_for('employer.post_job') }}" class="nav-link">+ Post Opening</a></li>
@@ -103,10 +104,11 @@
         {% else %}
             <!-- Public Navigation -->
             <ul class="nav-links" id="navLinksMenu">
-                <li><a href="{{ url_for('candidate.jobs') }}" class="nav-link">Explore Roles</a></li>
-                <li><a href="{{ url_for('company.company_list') }}" class="nav-link">Directory</a></li>
-                <li><a href="{{ url_for('auth.login') }}" class="btn btn-secondary btn-sm">Sign In</a></li>
-                <li><a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-sm">Create Account</a></li>
+                <li><a href="{{ url_for('candidate.jobs') }}" class="nav-link nav-link--glow">Job Catalog</a></li>
+                <li><a href="{{ url_for('company.company_list') }}" class="nav-link nav-link--glow">Companies</a></li>
+                <li><a href="{{ url_for('candidate.learning') }}" class="nav-link nav-link--glow">Syllabus Hub</a></li>
+                <li><a href="{{ url_for('auth.login') }}" class="btn btn-secondary btn-sm nav-cta">Sign In</a></li>
+                <li><a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-sm nav-cta nav-cta--gold">Create Account</a></li>
             </ul>
         {% endif %}
     </nav>
