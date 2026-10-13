@@ -9,7 +9,7 @@ PROFICIENCY_WEIGHTS = {
     'Beginner': 0.5
 }
 
-def analyze_skill_gap(user, job):
+def analyze_skill_gap(user, job, include_courses=False):
     if not job:
         return {
             'match_score': 0,
@@ -22,7 +22,7 @@ def analyze_skill_gap(user, job):
     if user and user.is_candidate():
         for cs in user.candidate_skills:
             user_skill_map[cs.skill_id] = {
-                'skill_name': cs.skill.name,
+                'skill_name': cs.skill.name if cs.skill else 'Skill',
                 'proficiency': cs.proficiency,
                 'weight': PROFICIENCY_WEIGHTS.get(cs.proficiency, 0.75)
             }
@@ -56,25 +56,28 @@ def analyze_skill_gap(user, job):
             matched_skills.append({
                 'skill_id': sk_id,
                 'name': sk_name,
+                'candidate_level': u_sk['proficiency'],
                 'user_level': u_sk['proficiency'],
                 'required_level': req_lvl,
                 'status': 'Matched' if skill_score >= 0.85 else 'Partial Match'
             })
         else:
-            courses = Course.query.filter_by(skill_id=sk_id).limit(3).all()
             course_list = []
-            for c in courses:
-                course_list.append({
-                    'id': c.id,
-                    'title': c.title,
-                    'provider': c.provider,
-                    'source_type': c.source_type,
-                    'url': c.url,
-                    'duration': c.duration,
-                    'difficulty': c.difficulty
-                })
+            if include_courses:
+                courses = Course.query.filter_by(skill_id=sk_id).limit(3).all()
+                for c in courses:
+                    course_list.append({
+                        'id': c.id,
+                        'title': c.title,
+                        'provider': c.provider,
+                        'source_type': c.source_type,
+                        'url': c.url,
+                        'duration': c.duration,
+                        'difficulty': c.difficulty
+                    })
 
             missing_skills.append({
+                'id': sk_id,
                 'skill_id': sk_id,
                 'name': sk_name,
                 'required_level': req_lvl,

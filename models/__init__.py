@@ -3,9 +3,9 @@ from database.firestore_db import get_db
 from werkzeug.exceptions import NotFound
 from firebase_admin import firestore as _fs
 
-# Lightweight in-memory query cache for high-speed response (30s TTL)
+# High-speed in-memory query cache for instant sub-millisecond response (120s TTL)
 _QUERY_CACHE = {}
-_CACHE_TTL = 30  # seconds
+_CACHE_TTL = 120  # seconds
 
 def _get_cache(key):
     if key in _QUERY_CACHE:

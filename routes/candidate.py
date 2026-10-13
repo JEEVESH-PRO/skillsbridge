@@ -175,7 +175,7 @@ def skills_gap(job_id):
         return redirect(url_for('auth.login'))
 
     job = JobPosting.query.get_or_404(job_id)
-    analysis = analyze_skill_gap(user, job)
+    analysis = analyze_skill_gap(user, job, include_courses=True)
 
     return render_template(
         'candidate/skills_gap.html',
