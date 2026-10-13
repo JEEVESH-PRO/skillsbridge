@@ -3,24 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1A362B">
     <title>{% block title %}SkillsBridge — Technical Competency Ledger & Syllabus Engine{% endblock %}</title>
+
+    <!-- Only replay the full preloader on the first visit of a session -->
+    <script>
+        try { if (sessionStorage.getItem('sb_seen')) document.documentElement.classList.add('sb-seen'); }
+        catch (e) { /* storage unavailable — preloader will simply show once */ }
+    </script>
     <meta name="description" content="SkillsBridge maps candidate competency matrices against live production engineering requirements to diagnose exact syllabus deltas.">
     
     <!-- Favicons -->
-    <link rel="icon" type="image/png" sizes="64x64" href="{{ url_for('static', filename='images/skillsbridge-favicon-64.png') }}?v=6.0">
-    <link rel="icon" type="image/png" sizes="256x256" href="{{ url_for('static', filename='images/skillsbridge-favicon-256.png') }}?v=6.0">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/skillsbridge-square-logo.png') }}?v=6.0">
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ url_for('static', filename='images/skillsbridge-favicon-64.png') }}?v=7.0">
+    <link rel="icon" type="image/png" sizes="256x256" href="{{ url_for('static', filename='images/skillsbridge-favicon-256.png') }}?v=7.0">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/skillsbridge-square-logo.png') }}?v=7.0">
 
     <!-- Design System Stylesheets -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=6.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}?v=6.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=7.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}?v=7.0">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
 
-    <!-- Hairline System Loading Indicator (Non-blocking) -->
-    <div id="preloader">
-        <div class="progress-track"></div>
+    <!-- Animated aurora background -->
+    <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+
+    <!-- Brand preloader (first visit only — see inline session check in head) -->
+    <div id="preloader" role="status" aria-live="polite">
+        <div class="pl-mark">Skills<em>Bridge</em></div>
+        <div class="pl-bar"></div>
+        <div class="pl-sub">Initialising competency ledger</div>
     </div>
 
     <!-- Editorial Header / Navigation -->
@@ -172,8 +184,9 @@
         </div>
     </footer>
 
-    <script src="{{ url_for('static', filename='js/main.js') }}?v=6.0"></script>
-    <script src="{{ url_for('static', filename='js/skills.js') }}?v=6.0"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}?v=7.0"></script>
+    <script src="{{ url_for('static', filename='js/skills.js') }}?v=7.0"></script>
+    <script src="{{ url_for('static', filename='js/motion.js') }}?v=7.0"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

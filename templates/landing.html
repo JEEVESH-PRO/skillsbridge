@@ -47,7 +47,7 @@
         </div>
 
         <!-- Specimen Telemetry Card (Tangible Proof) -->
-        <div class="editorial-panel" style="padding: 2rem; background: var(--surface);">
+        <div class="editorial-panel" data-tilt="5" style="padding: 2rem; background: var(--surface);">
             <div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 1rem; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem;">
                 <span class="mono-meta">LIVE AUDIT SPECIMEN // 01</span>
                 <span class="badge badge-domain">ROLE: CLOUD BACKEND</span>
@@ -167,7 +167,10 @@
         <a href="{{ url_for('candidate.jobs') }}" class="btn btn-secondary btn-sm">Explore All Roles →</a>
     </div>
 
-    <div class="grid-2">
+    <div class="hscroll-wrap" data-no-reveal>
+        <button class="hscroll-nav prev" type="button" aria-label="Previous roles">‹</button>
+        <button class="hscroll-nav next" type="button" aria-label="Next roles">›</button>
+        <div class="hscroll">
         {% for job in recent_jobs %}
             <div class="job-card">
                 <div>
@@ -198,6 +201,7 @@
                 </div>
             </div>
         {% endfor %}
+        </div>
     </div>
 </section>
 {% endblock %}

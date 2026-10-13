@@ -10,16 +10,16 @@
 </div>
 
 <!-- Course Provider Filter Pills -->
-<div class="filter-pills">
-    <button class="pill active" type="button">ALL MODULES</button>
-    <button class="pill" type="button">PLATFORM / COURSERA</button>
-    <button class="pill" type="button">ENGINEERING DOCUMENTATION</button>
-    <button class="pill" type="button">COMPANY OFFICIAL</button>
+<div class="filter-pills" data-filter-target="courseGrid">
+    <button class="pill active" type="button" data-filter="all">ALL MODULES</button>
+    <button class="pill" type="button" data-filter="platform">PLATFORM / COURSERA</button>
+    <button class="pill" type="button" data-filter="youtube">VIDEO LECTURE</button>
+    <button class="pill" type="button" data-filter="company">COMPANY OFFICIAL</button>
 </div>
 
-<div class="grid-3">
+<div class="grid-3" id="courseGrid">
     {% for crs in courses %}
-        <div class="editorial-panel" style="padding: 1.75rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1.25rem;">
+        <div class="editorial-panel" data-source="{{ crs.source_type }}" style="padding: 1.75rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1.25rem;">
             <div>
                 <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.85rem;">
                     <span class="badge badge-domain">[{{ crs.skill.name }}]</span>
@@ -47,5 +47,8 @@
             </div>
         </div>
     {% endfor %}
+</div>
+<div class="editorial-panel filter-empty-state" style="display:none; padding:3rem; text-align:center; color:var(--text-muted);">
+    No curriculum modules match this provider filter yet.
 </div>
 {% endblock %}
