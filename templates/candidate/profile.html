@@ -22,14 +22,14 @@
     <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
         <div>
             <span class="mono-meta">DOCUMENT INGESTION</span>
-            <h2 style="font-size: 1.25rem; margin-top: 0.2rem;">Parse Repository History or Resume Document</h2>
+            <h2 style="font-size: 1.25rem; margin-top: 0.2rem;">Analyze Your Resume</h2>
         </div>
-        <span class="mono-meta" style="color: var(--text-dim);">AUTOMATIC NORMALIZATION</span>
+        <span class="mono-meta" style="color: var(--text-dim);">AI SKILL EXTRACTION</span>
     </div>
 
     <form method="POST" action="{{ url_for('candidate.parse_resume') }}" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 1.25rem;">
         <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label" for="resume_text">Paste Codebase Readme, Tech Stack Spec, or Resume Markdown</label>
+            <label class="form-label" for="resume_text">Paste your resume text here</label>
             <textarea id="resume_text" name="resume_text" class="form-textarea" rows="4" placeholder="e.g. Distributed backend engineer with 4 years deploying Python, PostgreSQL, Docker, Redis, PyTorch, and AWS microservices..."></textarea>
         </div>
 
@@ -44,6 +44,18 @@
             </button>
         </div>
     </form>
+</div>
+
+<!-- Celeste AI career suitability (special button) -->
+<div class="editorial-panel" style="padding: 1.75rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border: 1px solid rgba(120,200,180,0.35);">
+    <div>
+        <span class="mono-meta" style="color: var(--accent);">PSYCHOLOGICAL CAREER FIT</span>
+        <h3 style="font-size: 1.1rem; margin-top: 0.3rem;">Find your best &amp; most suitable job</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0.3rem 0 0;">Use Celeste AI to discover psychologically aligned roles based on your profile.</p>
+    </div>
+    <a href="https://celeste-ai-career-counselor.netlify.app/" target="_blank" rel="noopener" class="btn-celeste">
+        ✨ Open Celeste AI — Find My Fit
+    </a>
 </div>
 
 <div class="grid-2">

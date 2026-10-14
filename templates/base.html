@@ -30,9 +30,11 @@
 
     <!-- Brand preloader (first visit only — see inline session check in head) -->
     <div id="preloader" role="status" aria-live="polite">
+        <div class="pl-orb"></div>
+        <div class="pl-ring"></div>
         <div class="pl-mark">Skills<em>Bridge</em></div>
         <div class="pl-bar"></div>
-        <div class="pl-sub">Initialising competency ledger</div>
+        <div class="pl-sub">Initialising competency matrix</div>
     </div>
 
     <!-- Editorial Header / Navigation -->
@@ -189,6 +191,21 @@
     <script src="{{ url_for('static', filename='js/main.js') }}?v=7.0"></script>
     <script src="{{ url_for('static', filename='js/skills.js') }}?v=7.0"></script>
     <script src="{{ url_for('static', filename='js/motion.js') }}?v=7.0"></script>
+    <div id="cursor-glow" aria-hidden="true"></div>
+    <script>
+    (function () {
+        const glow = document.getElementById('cursor-glow');
+        if (!glow || window.matchMedia('(pointer: coarse)').matches) return;
+        document.addEventListener('mousemove', function (e) {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+        });
+        document.querySelectorAll('a, button, .btn, .pill').forEach(function (el) {
+            el.addEventListener('mouseenter', function () { glow.classList.add('hover'); });
+            el.addEventListener('mouseleave', function () { glow.classList.remove('hover'); });
+        });
+    })();
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -1,5 +1,8 @@
 import re
 import io
+import os
+import json
+from urllib import request as urllib_request, error as urllib_error
 from models import db
 from models.skill import Skill, CandidateSkill
 
@@ -152,11 +155,66 @@ def parse_resume_text(resume_text):
 
     return list(extracted_skills.values())
 
+def _groq_extract_skills(resume_text):
+    """Optional real-time extraction using Groq when GROQ_API_KEY is configured."""
+    api_key = os.environ.get('GROQ_API_KEY')
+    if not api_key or not (resume_text or '').strip():
+        return None
+    try:
+        payload = {
+            'model': os.environ.get('GROQ_MODEL', 'llama-3.1-8b-instant'),
+            'temperature': 0.2,
+            'response_format': {'type': 'json_object'},
+            'messages': [
+                {
+                    'role': 'system',
+                    'content': (
+                        'Extract the candidate technical skills from the resume. '
+                        'Return strict JSON object with a "skills" array. '
+                        'Each item must have keys: name, category, proficiency. '
+                        'Proficiency must be one of Beginner, Intermediate, Advanced, Expert.'
+                    ),
+                },
+                {'role': 'user', 'content': resume_text[:12000]},
+            ],
+        }
+        data = json.dumps(payload).encode('utf-8')
+        req = urllib_request.Request(
+            'https://api.groq.com/openai/v1/chat/completions',
+            data=data,
+            headers={
+                'Authorization': f'Bearer {api_key}',
+                'Content-Type': 'application/json',
+                'User-Agent': 'SkillsBridge/1.0',
+            },
+            method='POST',
+        )
+        with urllib_request.urlopen(req, timeout=25) as resp:
+            body = json.loads(resp.read().decode('utf-8'))
+        content = body['choices'][0]['message']['content']
+        parsed = json.loads(content)
+        rows = parsed.get('skills') if isinstance(parsed, dict) else parsed
+        if not isinstance(rows, list):
+            return None
+        skills = []
+        for row in rows:
+            if not isinstance(row, dict) or not row.get('name'):
+                continue
+            skills.append({
+                'name': str(row.get('name')).strip(),
+                'category': str(row.get('category') or 'General').strip(),
+                'proficiency': str(row.get('proficiency') or 'Intermediate').strip(),
+            })
+        return skills or None
+    except Exception:
+        return None
+
+
 def auto_update_candidate_skills(user_id, resume_text):
     """
     Parses resume_text and automatically appends newly extracted skills to the candidate's skill matrix.
     """
-    extracted = parse_resume_text(resume_text)
+    extracted = _groq_extract_skills(resume_text) or parse_resume_text(resume_text)
     if not extracted:
         return []
 
