@@ -7,7 +7,8 @@ from werkzeug.exceptions import NotFound
 _env_db_path = os.environ.get('DB_PATH')
 if _env_db_path:
     DB_PATH = _env_db_path
-elif os.environ.get('AWS_LAMBDA_FUNCTION_NAME') or os.environ.get('NETLIFY') or os.environ.get('LAMBDA_TASK_ROOT'):
+elif (os.environ.get('AWS_LAMBDA_FUNCTION_NAME') or os.environ.get('NETLIFY') or
+      os.environ.get('LAMBDA_TASK_ROOT') or os.environ.get('VERCEL') or os.environ.get('VERCEL_ENV')):
     # Serverless hosts (Netlify/AWS Lambda) have a read-only bundle dir; use /tmp.
     DB_PATH = '/tmp/skillsbridge.db'
 else:
