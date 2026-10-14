@@ -9,7 +9,7 @@ from routes.company_search import company_bp
 from routes.employer import employer_bp
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='public/static', static_url_path='/static')
     app.config.from_object(Config)
 
     sqlite_db.init_db()
