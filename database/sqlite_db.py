@@ -4,7 +4,14 @@ from contextlib import closing
 from datetime import datetime
 from werkzeug.exceptions import NotFound
 
-DB_PATH = os.environ.get('DB_PATH') or os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'skillsbridge.db')
+_env_db_path = os.environ.get('DB_PATH')
+if _env_db_path:
+    DB_PATH = _env_db_path
+elif os.environ.get('AWS_LAMBDA_FUNCTION_NAME') or os.environ.get('NETLIFY') or os.environ.get('LAMBDA_TASK_ROOT'):
+    # Serverless hosts (Netlify/AWS Lambda) have a read-only bundle dir; use /tmp.
+    DB_PATH = '/tmp/skillsbridge.db'
+else:
+    DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'skillsbridge.db')
 
 
 def get_db_connection():
