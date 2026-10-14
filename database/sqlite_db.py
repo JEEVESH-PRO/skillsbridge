@@ -4,7 +4,7 @@ from contextlib import closing
 from datetime import datetime
 from werkzeug.exceptions import NotFound
 
-DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'skillsbridge.db')
+DB_PATH = os.environ.get('DB_PATH') or os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'skillsbridge.db')
 
 
 def get_db_connection():
