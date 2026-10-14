@@ -6,6 +6,7 @@
 [build.environment]
   PYTHON_VERSION = "3.12"
   DB_PATH = "/tmp/skillsbridge.db"
+  SECRETS_SCAN_OMIT_KEYS = "DB_PATH"
 
 [functions]
   directory = "netlify/functions"
